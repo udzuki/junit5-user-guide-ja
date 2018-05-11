@@ -325,3 +325,56 @@ Maven Surefire Pluginは次のパターンにマッチする完全修飾クラ�
 </build>
 ...
 ```
+
+### 4.2.3. Ant
+[Ant](https://ant.apache.org/)のバージョン`1.10.3`から、新しい[`junitlauncher`](https://ant.apache.org/manual/Tasks/junitlauncher.html)タスクが導入され、JUnit Platform上でのテスト実行がネイティブ・サポートされました。`junitlauncher`タスクは、単にJUnit Platformを起動して選択されたテストを渡す責任を担っています。JUnit Platformはその後、テストの探索と実行を登録されたテストエンジンに委譲します。
+
+`junitlauncher`タスクは[リソース・コレクション](https://ant.apache.org/manual/Types/resources.html#collection)のようなネイティブなAnt構造になるべく近い形で、ユーザがテストエンジンに実行してほしいテストを選べるようにしています。これによって、タスクに他のAntのコアなタスクと比べて一貫して自然な感じを与えています。
+
+> :information_source: Ant 1.10.3にある`junitlauncher`タスクのバージョンは、JUnit Platformを開始するための基本的で最小のサポートを提供しています。追加的な機能強化（分離したJVMへのテスト分岐のサポートも含む）が次のAntのリリースで利用可能になる予定です。
+
+[`junit5-jupiter-starter-ant`](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-starter-ant)プロジェクト内の`build.xml`は、どのようにタスクを使い、開始ポイントとして使うかを示しています。
+
+#### 基本的な使い方
+次の例は、`junitlauncher`タスクに1つのテストクラス（つまり、`org.myapp.test.MyFirstJUnit5Test`）を選ぶための設定方法を示しています。
+
+```xml
+<path id="test.classpath">
+    <!-- The location where you have your compiled classes -->
+    <pathelement location="${build.classes.dir}" />
+</path>
+
+<!-- ... -->
+
+<junitlauncher>
+    <classpath refid="test.classpath" />
+    <test name="org.myapp.test.MyFirstJUnit5Test" />
+</junitlauncher>
+```
+
+`test`要素を使うことで、実行したいテストを1つ選択することができます。`classpath`要素はを使うことで、JUnit Platformを開始するために使うクラスパスを指定することができます。このクラスパスは、テストクラスを特定するのにも使われます。
+
+次の例は、`junitlauncher`タスクに複数箇所からテストクラスを選ぶための設定方法を示しています。
+
+```xml
+<path id="test.classpath">
+    <!-- The location where you have your compiled classes -->
+    <pathelement location="${build.classes.dir}" />
+</path>
+....
+<junitlauncher>
+    <classpath refid="test.classpath" />
+    <testclasses outputdir="${output.dir}">
+        <fileset dir="${build.classes.dir}">
+            <include name="org/example/**/demo/**/" />
+        </fileset>
+        <fileset dir="${some.other.dir}">
+            <include name="org/myapp/**/" />
+        </fileset>
+    </testclasses>
+</junitlauncher>
+```
+
+上の例で、`testclasses`要素によって、違う場所にある複数のテストクラスを選択しています。
+
+用法と設定オプションの詳細については、[`junitlauncher`タスク](https://ant.apache.org/manual/Tasks/junitlauncher.html)に関するAntの公式ドキュメントをご覧ください。
