@@ -1,11 +1,11 @@
-# 概要
+# 1. 概要
 本文書の目的は、テストを書くプログラマや拡張機能の開発者（extension authors）、ビルドツールやIDEベンダといった駆動部分の開発者（engine authors）に包括的なレファレンス文書を提供することです。
 
 このドキュメントは[PDF](https://junit.org/junit5/docs/current/user-guide/index.pdf)でも利用可能です。（訳注：リンク切れ）
 
 > :bulb: *翻訳* このドキュメントは簡体字中国語でも利用可能です。
 
-## JUnit 5とは？
+## 1.1. JUnit 5とは？
 これまでのバージョンのJUnitとは異なり、JUnit 5は3つのサブプロジェクトの様々なモジュールから構成されています。
 
 ***JUnit 5 = JUnit Platform + JUnit Jupiter + JUnit Vintage***
@@ -16,8 +16,8 @@
 
 **JUnit Vintage**は、プラットフォーム上でJUnit3とJUnit4ベースのテストを実行するための`TestEngine`を提供します。
 
-## サポートしているJavaのバージョン
+## 1.2. サポートしているJavaのバージョン
 JUnit 5は実行時にJava 8(またはそれ以上)を必要とします。しかしながら、テストコードのコンパイルはそれよりも前のバージョンのJDKでも可能です。
 
-## ヘルプ
+## 1.3. ヘルプ
 JUnit 5に関連した質問は[Stack Overflow](https://stackoverflow.com/questions/tagged/junit5) でするか、[Gitter](https://gitter.im/junit-team/junit5)で会話してください。

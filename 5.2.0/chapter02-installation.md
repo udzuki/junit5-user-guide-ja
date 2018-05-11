@@ -1,10 +1,10 @@
-# インストール
+# 2. インストール
 最終リリースとマイルストーンのついた生成物はMaven Centralにデプロイされます。
 
 スナップショット版はSonatypeの[スナップショットレポジトリ](https://oss.sonatype.org/content/repositories/snapshots)の[/org/junit](https://oss.sonatype.org/content/repositories/snapshots/org/junit/)以下にデプロイされます。
 
-## 依存関係のメタデータ
-### JUnit Platform
+## 2.1. 依存関係のメタデータ
+### 2.1.1 JUnit Platform
 - Group ID: `org.junit.platrform`
 - Version: `1.2.0-M1` (2018年4月17日現在)
 - Articfact IDs:
@@ -18,7 +18,7 @@
     - `junit-platform-suite-api`: JUnit Platform上でテストスイートの設定をするためのアノテーションです。[JUnitPlatform runner]()にサポートされています。また、サードパーティによる`TestEngine`実装にもサポートされている可能性があります。
     - `junit-platform-surefire-provider`: [Maven Surefire]()からのJUnit Platform上のテスト実行をサポートします。
 
-### JUnit Jupiter
+### 2.1.2. JUnit Jupiter
 - Group ID: `org.junit.jupiter`
 - Version: `5.2.0-M1` (2018年4月17日現在)
 - Articfact IDs:
@@ -27,20 +27,20 @@
     - `junit-jupiter-params`: JUnit Jupiterでの[パラメータ化テスト]()をサポートします。
     - `junit-jupiter-migrationsupport`: JUnit 4からJUnit Jupiterへのマイグレーションをサポートします。いくつかのJUnit 4 rulesを実行する時のみ必要です。
 
-### JUnit Vintage
+### 2.1.3. JUnit Vintage
 - Group ID: `org.junit.vintage`
 - Version: `5.2.0`
 - Articfact ID:
     - `junit-vintage-engine`: JUnit Vintageテストエンジンの実装です。JUnit 3やJUnit 4で書かれたテストをJUnit Platform上で実行することができます。
 
-### Bill of Materials (BOM)
+### 2.1.4. Bill of Materials (BOM)
 下のMaven設定で提供されている *Bill of Materials* POMは、[Maven](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies)や[Gradle](https://docs.gradle.org/current/userguide/managing_transitive_dependencies.html#sec:bom_import)を用いて上記の生成物を複数参照する際に、依存関係の管理を容易にすることができます。
 
 - Group ID: `org.junit`
 - Articfact ID: `junit-bom`
 - Version: `5.2.0`
 
-### 依存関係
+### 2.1.5. 依存関係
 上記の生成物は全て、次の *@API Guardian JAR*で公開されているMaven POMsに依存関係があります。
 - Group ID: `org.apiguardian`
 - Articfact ID: `apiguardian-api`
@@ -52,11 +52,11 @@
 - Articfact ID: `opentest4j`
 - Version: `1.0.0` (2018年4月17日現在)
 
-## 依存関係の図
+## 2.2. 依存関係の図
 
 ![](https://junit.org/junit5/docs/5.2.0/user-guide/images/component-diagram.svg)
 
-## JUnit Jupiter サンプルプロジェクト
+## 2.3. JUnit Jupiter サンプルプロジェクト
 [junit5-samples](https://github.com/junit-team/junit5-samples)レポジトリは、JUnit JupiterとJUnit Vintageをベースとしたサンプルプロジェクトをいくつもホストしています。プロジェクトには`build.gradle`と`pom.xml`がそれぞれ置かれています。
 
 - Gradleに対しては、[junit5-jupiter-starter-gradle](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-starter-gradle)を確認してください。
