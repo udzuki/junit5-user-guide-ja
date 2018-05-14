@@ -378,3 +378,159 @@ Maven Surefire Pluginは次のパターンにマッチする完全修飾クラ�
 上の例で、`testclasses`要素によって、違う場所にある複数のテストクラスを選択しています。
 
 用法と設定オプションの詳細については、[`junitlauncher`タスク](https://ant.apache.org/manual/Tasks/junitlauncher.html)に関するAntの公式ドキュメントをご覧ください。
+
+## 4.3. コンソール・ラウンチャー
+[`ConsoleLauncher`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/console/ConsoleLauncher.html)はコマンドラインJavaアプリケーションで、JUnit Platformをコマンドラインから起動することができます。例えば、JUnit VintageとJUnit Jupiterテストを実行し、テストの実行結果をコンソールに出力させることができます。
+
+全ての依存関係が含まれた実行可能な`junit-platform-console-standalone-1.2.0.jar`は、Mavenセントラルレポジトリ内の[`junit-platform-console-standalone`](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone)ディレクトリ以下にあります。スタンドアローンな`ConsoleLauncher`は次のように[実行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html)できます。
+
+`java -jar junit-platform-console-standalone-1.2.0.jar <[Options>`
+
+これが出力の例です。
+
+```
+├─ JUnit Vintage
+│  └─ example.JUnit4Tests
+│     └─ standardJUnit4Test ✔
+└─ JUnit Jupiter
+   ├─ StandardTests
+   │  ├─ succeedingTest() ✔
+   │  └─ skippedTest() ↷ for demonstration purposes
+   └─ A special test case
+      ├─ Custom test name containing spaces ✔
+      ├─ ╯°□°）╯ ✔
+      └─ 😱 ✔
+
+Test run finished after 64 ms
+[         5 containers found      ]
+[         0 containers skipped    ]
+[         5 containers started    ]
+[         0 containers aborted    ]
+[         5 containers successful ]
+[         0 containers failed     ]
+[         6 tests found           ]
+[         1 tests skipped         ]
+[         5 tests started         ]
+[         0 tests aborted         ]
+[         5 tests successful      ]
+[         0 tests failed          ]
+```
+
+> :information_source: *Exitコード* [`ConsoleLauncher`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/console/ConsoleLauncher.html)は、何らかのコンテナかテスト失敗があった時にステータスコード・1、そうでない時ステータスコード・0を返します。
+
+### 4.3.1. オプション
+
+## 4.4. JUnit 4を用いてJUnit Platformを実行する
+`JUnitPlatform`ランナーは、JUnit 4ベースの`Runner`であり、JUnit 4環境内のJUNit Platform上でサポートされているプログラミングモデルを持つテストは全て実行することができます（例えば、JUnit Jupiterテストクラス）。
+
+`@RunWith(JUnitPlatform.class)`アノテーションをクラスに付与することで、JUnit 4をサポートしているもののJUnit PlatformはまだサポートしていないIDEやビルドシステムであっても実行されることができます。
+
+> :information_source: JUnit PlatformはJUnit 4にはない特徴を持っているので、そのランナーはJUnit Platformのサブセットのみをサポートしています。特に、レポート機能についてが当てはまります（[表示名vs技術的な名称]()をご覧ください）。しかし、さしあたり`JUnitPlatform`ランナーはとっかかりやすい方法です。
+
+### 4.4.1. セットアップ
+次の生成物とそれらの依存関係がクラスパスに必要です。グループID、アーティファクトID、バージョンに関する詳細は[依存関係のメタデータ]()をご覧ください。
+
+#### 明示的な依存関係
+- *test*スコープ内での`junit-platform-runner`: `JUnitPlatform`ランナーの位置
+- *test*スコープ内での`junit-4.12.jar`: JUnit 4を用いたテスト実行用
+- *test*スコープ内での`junit-jupiter-api`: `@Test`などを含むJUnit Jupiterを用いてテストを書くためのAPI
+- *test runtime*スコープ内での`junit-jupiter-engine`: JUnit Jupiterのための`TestEngine`実装
+
+#### 間接的な依存関係
+- *test*スコープ内での`junit-platform-suite-api`
+- *test*スコープ内での`junit-platform-launcher`
+- *test*スコープ内での`junit-platform-engine`
+- *test*スコープ内での`junit-platform-commons`
+- *test*スコープ内での`opentest4j`
+
+### 4.4.2. 表示名vs技術的な名称
+`@RunWith(JUnitPlatform.class)`を通してクラスにカスタム*表示名*を定義するには、単に`@SuiteDisplayName`をクラスに付与してカスタム値を提供するだけです。
+
+デフォルトでは、*表示名*はテスト生成物のために使われます；しかしながら、GradleやMavenといったビルドツールでテスト実行するために`JUnitPlatrform`ランナーが使われている場合、生成されたテストレポートはしばしば、テストクラス名や特殊文字を含むカスタム表示名のような短い表示名の代わりに、テスト生成物の*技術的な名称*ー例えば、完全修飾クラス名ーを含む必要があります。レポート目的のために技術的な名称を有効化するには、単に`@RunWith(JUnitPlatform.class)`と一緒に`@UseTechnicalNames`アノテーションを宣言するだけです。
+
+`@UseTechnicalNames`の存在は、`@SuiteDisplayName`を通して設定されたいかなるカスタム表示名も上書きすることに注意してください。
+
+### 4.4.3. 1つのテストクラス
+`JUnitPlatform`ランナーを使う1つの方法は、テストクラスに直接`@RunWith(JUnitPlatform.class)`を付与することです。次のテストメソッドは`org.junit.Test`（JUnit Vintage）ではなく、`org.junit.jupiter.api.Test`（JUnit JUpiter）が付与されていることに注意してください。さらにこのケースでは、テストクラスは`public`でないといけません；そうでないと、IDEやビルドツールがJUnit 4のテストクラスとして認識してくれないかもしれません。
+
+```java
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
+
+@RunWith(JUnitPlatform.class)
+public class JUnit4ClassDemo {
+
+    @Test
+    void succeedingTest() {
+        /* no-op */
+    }
+
+    @Test
+    void failingTest() {
+        fail("Failing for failing's sake.");
+    }
+
+}
+```
+
+### 4.4.4. テストスイート
+複数のテストクラスがある場合、次の例のようにテストスイートを作成することができます。
+
+```java
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.platform.suite.api.SelectPackages;
+import org.junit.platform.suite.api.SuiteDisplayName;
+import org.junit.runner.RunWith;
+
+@RunWith(JUnitPlatform.class)
+@SuiteDisplayName("JUnit 4 Suite Demo")
+@SelectPackages("example")
+public class JUnit4SuiteDemo {
+}
+```
+
+`JUnit4SuiteDemo`は、`example`パッケージとサブパッケージ内にある全てのテストを発見・実行します。デフォルトでは、`Test`で始まるか、`Test`もしくは`Tests`で終わる名前を持つテストクラスのみが含まれます。
+
+> :information_source: *追加的な設定オプション* ただの`@SelectPackages`よりも多くのテスト発見・フィルタリング用の設定オプションがあります。詳細については、[Javadoc](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/suite/api/package-summary.html)をご覧ください。
+
+## 4.5. 設定パラメータ
+プラットフォームに、インクルードするべきテストクラスとテストエンジンやスキャンするべきパッケージ等を知らせるのに加えて、時々、特定のテストエンジン、もしくは登録した拡張に特化した追加的なカスタム設定パラメータの提供が必要なことがあります。例えば、JUnit Jupiter `TestEngine`は次のユースケースのための*設定パラメータ*をサポートしています。
+
+- [デフォルトのテストインスタンス・ライフサイクルを変更する]()
+- [拡張自動検出を有効化する]()
+- [条件を無効化する]()
+
+*設定パラメータ*はテキストベースのキーバリュー・ペアで、次の仕組み農地の1つを通してJUnit Platform上で実行しているテストエンジンに供給されます。
+
+1. [`Launcher` API]()に供給するリクエストを構築する`LauncherDiscoveryRequestBuilder`内の`configurationParameter()`メソッドと`configurationParameters()`。JUnit Platformによって提供されているツールを通してテスト実行している場合、設定パラメータを次のように決定する必要があります。
+ - [コンソール・ラウンチャー]()： `--config`コマンドライン・オプションを使う。
+ - [Gradle plugin]()： `configurationParameter`か`configurationParameters`のDSLを使う。
+ - [Maven Surefire provider]()： `configurationParameters`プロパティを使う。
+2. JVMシステムプロパティ
+3. JUnit Platform設定ファイル：`junit-platform.properties`という名前で、クラスパスのルートに置かれたJava `Properties`ファイルのシンタックス規則に従ったファイル
+
+> :information_source: 設定パラメータは上で定義された順に見られます。結果として、`Launcher`に直接供給された設定パラメータは、システムプロパティと設定ファイルを通して供給されたパラメータよりも優先して使われます。同じように、システムプロパティを通して供給された設定パラメータは、設定ファイルを通して供給された設定パラメータよりも優先して使われます。
+
+## 4.6. タグ表現
+タグ表現は、ブーリアン（boolean）表現で`!`や`&`、`|`といったオペレータも使われます。さらに、`(`と`)`もオペレータの優先順位を調節するために使われます。
+
+*表1. オペレータ（優先順位の降順）*
+
+|オペレータ|意味|結合性|
+|:--:|:--:|:--:|
+|!|not|右|
+|&|and|左|
+|&#124;|or|左|
+
+もし複数の次元を横切ってテストにタグ付けしている場合、タグ表現は実行するテストの選択を助けてくれます。テストタイプ（例えば、*micro*や*integration*、*end-to-end*）や特徴（**foo**や**bar**、**baz**）によってタグ付けするときは、次のタグ表現が役に立つでしょう。
+
+|タグ表現|選択|
+|:--:|:--:|
+|foo|**foo**の全てのテスト|
+|bar &#124; baz|**bar**と**baz**の全てのテスト|
+|bar & baz|**bar**かつ**baz**の全てのテスト|
+|foo & !end-to-end|**foo**のうち、*end-to-end*でない全てのテスト|
+|(micro &#124; integration) & (foo &#124; baz)|**foo**か**baz**のうち、*micro*か*integration*の全てのテスト|
