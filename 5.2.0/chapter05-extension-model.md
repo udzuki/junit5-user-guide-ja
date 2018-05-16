@@ -344,3 +344,29 @@ public class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 `ReflectionSupport`は、標準のJDKリフレクションとクラス読み込みメカニズムを増強するためのstaticなユーティリティメソッドを提供しています。これらは、特定の述語にマッチするクラスを探すためにクラスパスをスキャンしたり、クラスの新しいインスタンスを読み込んで生成したり、メソッドを見つけて呼び出すためのメソッドを含みます。これらのメソッドのいつくかは、マッチするメソッドの位置を特定するためにクラス階層を横断します。[`ReflectionSupport`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/commons/support/ReflectionSupport.html)のさらなる詳細については、JavaDocをご覧ください。
 
 ## 5.11. ユーザコードと拡張の相対実行順
+1つかそれ以上のテストメソッドを含むテストクラスを実行する時、多くの拡張コールバックが、ユーザの提供するテストとライフサイクルメソッドに加えて呼び出されます。次の図式は、ユーザ提供のコードと拡張コードの相対順位を示しています。
+
+![](https://junit.org/junit5/docs/5.2.0/user-guide/images/extensions_lifecycle.png)
+
+*ユーザコードと拡張コード*
+
+ユーザ提供のテストとライフサイクルメソッドはオレンジで示され、拡張によって提供されるコールバックは青で示されています。灰色のボックスは、1つのテストメソッドの実行を意味しており、テストクラスの全てのテストメソッドに対して繰り返されます。
+
+次の表は、[ユーザコードと拡張コード]()の図式内の12のステップについて、より詳しく説明をしています。
+
+|ステップ|インターフェイス/アノテーション|説明|
+|:-:|:-:|:-:|
+|1|インターフェイス `org.junit.jupiter.api.extension.BeforeAllCallback`|コンテナの全てのテストが実行される前に実行される拡張コード|
+|2|アノテーション `org.junit.jupiter.api.BeforeAll`|コンテナの全てのテストが実行される前に実行されるユーザコード|
+|3|インターフェイス `org.junit.jupiter.api.extension.BeforeEachCallback`|各テストが実行される前に実行される拡張コード|
+|4|アノテーション `org.junit.jupiter.api.BeforeEach`|各テストが実行される前に実行されるユーザコード|
+|5|インターフェイス `org.junit.jupiter.api.extension.BeforeTestExecutionCallback`|テストが実行される直前に実行される拡張コード|
+|6|アノテーション `org.junit.jupiter.api.Test`|実際のテストメソッドとなるユーザコード|
+|7|インターフェイス `org.junit.jupiter.api.extension.TestExecutionExceptionHandler`|テスト中に投げられる例外を扱う拡張コード|
+|8|インターフェイス `org.junit.jupiter.api.extension.AfterTestExecutionCallback`|テストと対応する例外ハンドラが実行された直後に実行される拡張コード|
+|9|アノテーション `org.junit.jupiter.api.AfterEach`|各テストが実行された後に実行されるユーザコード|
+|10|インターフェイス `org.junit.jupiter.api.extension.AfterEachCallback`|各テストが実行された後に実行される拡張コード|
+|11|アノテーション `org.junit.jupiter.api.AfterAll`|コンテナの全てのテストが実行された後に実行されるユーザコード|
+|12|インターフェイス `org.junit.jupiter.api.extension.AfterAllCallback`|コンテナの全てのテストが実行された後に実行される拡張コード|
+
+最も単純なケースでは、実際のテストメソッドのみが実行されます（ステップ 6）；他の全てのステップは選択制で、対応するライフサイクル・コールバックをサポートするユーザコードか拡張コードの存在に依存します。様々なライフサイクル・コールバックのさらなる詳細については、各アノテーションと拡張それぞれのJavaDocをご覧ください。
