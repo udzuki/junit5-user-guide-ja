@@ -166,3 +166,181 @@ class DocumentationDemo {
 - `List<A> findRepeatableAnnotations(Class<A> annotationType)`
 
 ## 5.6. テストライフサイクル・コールバック
+次のインターフェイスは、テスト実行ライフサイクルにおいて様々なポイントでテストを拡張するためのAPIを定義しています。実例に関しては次のセクションを、詳細については[`org.junit.jupiter.api.extension`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/package-summary.html)パッケージ内の各インターフェイスをご覧ください。
+
+- [`BeforeAllCallback`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/BeforeAllCallback.html)
+  - [`BeforeEachCallback`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/BeforeEachCallback.html)
+    - [`BeforeTestExecutionCallback`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/BeforeTestExecutionCallback.html)
+    - [`AfterTestExecutionCallback`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/AfterTestExecutionCallback.html)
+  - [`AfterEachCallback`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/AfterEachCallback.html)
+- [`AfterAllCallback`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/AfterAllCallback.html)
+
+> :information_source: *複数の拡張APIsを実装する*  拡張の開発者は、これらのインターフェイスのうち、いくつかを1つの拡張内に実装することを選ぶかもしれません。具体的な例については、[`SpringExtension`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)のソースコードをご覧ください。
+
+### 5.6.1. BeforeとAfterのテスト実行コールバック
+[`BeforeAllCallback`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/BeforeAllCallback.html)と[`AfterAllCallback`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/AfterAllCallback.html)は、それぞれテストメソッドが実行される*直前*と*直後*に実行される振る舞いを追加するための`Extension`APIを定義しています。そのように、これらのコールバックは、タイミングよく跡を追う似たようなユースケースによく適しています。もし`@BeforeEach`や`@AfterEach`メソッドの*周り*で呼び出されるコールバックを実装する必要がある場合、代わりに`BeforeEachCallback`と`AfterEachCallback`を実装してください。
+
+次の例は、これらのコールバックを使ってテストメソッドの実行時間を計算しログする方法を示しています。`TimingExtension`は、テスト実行の時間計測とログのために`BeforeTestExecutionCallback`と`AfterTestExecutionCallback`を実装しています。
+
+*テストメソッドの実行を時間計測してログする拡張*
+```java
+import java.lang.reflect.Method;
+import java.util.logging.Logger;
+
+import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
+import org.junit.jupiter.api.extension.ExtensionContext.Store;
+
+public class TimingExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback {
+
+    private static final Logger logger = Logger.getLogger(TimingExtension.class.getName());
+
+    private static final String START_TIME = "start time";
+
+    @Override
+    public void beforeTestExecution(ExtensionContext context) throws Exception {
+        getStore(context).put(START_TIME, System.currentTimeMillis());
+    }
+
+    @Override
+    public void afterTestExecution(ExtensionContext context) throws Exception {
+        Method testMethod = context.getRequiredTestMethod();
+        long startTime = getStore(context).remove(START_TIME, long.class);
+        long duration = System.currentTimeMillis() - startTime;
+
+        logger.info(() -> String.format("Method [%s] took %s ms.", testMethod.getName(), duration));
+    }
+
+    private Store getStore(ExtensionContext context) {
+        return context.getStore(Namespace.create(getClass(), context.getRequiredTestMethod()));
+    }
+
+}
+```
+`TimingExtensionTests`クラスは、`@ExtendWith`を通して`TimingExtension`を登録しているので、そのテストは実行時にこの時間計測が適用されます。
+
+*TimingExtensionを用いるテストクラス*
+```java
+@ExtendWith(TimingExtension.class)
+class TimingExtensionTests {
+
+    @Test
+    void sleep20ms() throws Exception {
+        Thread.sleep(20);
+    }
+
+    @Test
+    void sleep50ms() throws Exception {
+        Thread.sleep(50);
+    }
+
+}
+```
+
+次にあるのは、`TimingExtensionTests`が実行された時に生成されたログの例です。
+
+```
+INFO: Method [sleep20ms] took 24 ms.
+INFO: Method [sleep50ms] took 53 ms.
+```
+
+## 5.7. 例外処理
+[`TestExecutionExceptionHandler`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/TestExecutionExceptionHandler.html)は、テスト実行中に投げられた例外を処理する`Extensions`のためのAPIを提供しています。
+
+次の例は、`IOException`の全インスタンスを飲み込み、他の型の例外を投げ直す拡張を示しています。
+
+*例外を扱う拡張*
+```java
+public class IgnoreIOExceptionExtension implements TestExecutionExceptionHandler {
+
+    @Override
+    public void handleTestExecutionException(ExtensionContext context, Throwable throwable)
+            throws Throwable {
+
+        if (throwable instanceof IOException) {
+            return;
+        }
+        throw throwable;
+    }
+}
+```
+# 5.8. テストテンプレートに呼び出しコンテキストを提供する
+[`@TestTemplate`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/TestTemplate.html)メソッドは、少なくとも1つの[`TestTemplateInvocationContextProvider`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html)が登録されているときに実行されます。各プロバイダは、[`TestTemplateInvocationContext`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/TestTemplateInvocationContext.html)インスタンスの`Stream`を提供する責務を担っています。各コンテキストは、カスタム表示名と[`@TestTemplate`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/TestTemplate.html)メソッドの次の呼び出しのために使われる追加的な拡張のリストを特定します。
+
+次の例は、[`TestTemplateInvocationContextProvider`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html)の登録と実装だけでなく、テストテンプレートの書き方も示しています。
+
+*付随する拡張を持つテストテンプレート*
+
+```java
+@TestTemplate
+@ExtendWith(MyTestTemplateInvocationContextProvider.class)
+void testTemplate(String parameter) {
+    assertEquals(3, parameter.length());
+}
+
+public class MyTestTemplateInvocationContextProvider implements TestTemplateInvocationContextProvider {
+    @Override
+    public boolean supportsTestTemplate(ExtensionContext context) {
+        return true;
+    }
+
+    @Override
+    public Stream<TestTemplateInvocationContext> provideTestTemplateInvocationContexts(ExtensionContext context) {
+        return Stream.of(invocationContext("foo"), invocationContext("bar"));
+    }
+
+    private TestTemplateInvocationContext invocationContext(String parameter) {
+        return new TestTemplateInvocationContext() {
+            @Override
+            public String getDisplayName(int invocationIndex) {
+                return parameter;
+            }
+
+            @Override
+            public List<Extension> getAdditionalExtensions() {
+                return Collections.singletonList(new ParameterResolver() {
+                    @Override
+                    public boolean supportsParameter(ParameterContext parameterContext,
+                            ExtensionContext extensionContext) {
+                        return parameterContext.getParameter().getType().equals(String.class);
+                    }
+
+                    @Override
+                    public Object resolveParameter(ParameterContext parameterContext,
+                            ExtensionContext extensionContext) {
+                        return parameter;
+                    }
+                });
+            }
+        };
+    }
+}
+```
+
+この例では、テストテンプレートは2回呼び出されます。呼び出しの表示名は、呼び出しコンテキストによって決められたように"foo"と"bar"になります。各呼び出しは、メソッドパラメータを解決するためのカスタム[`ParameterResolver`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/ParameterResolver.html)を登録します。`ConsoleLauncher`を使った時の出力は次のようになります。
+
+```
+└─ testTemplate(String) ✔
+   ├─ foo ✔
+   └─ bar ✔
+```
+
+[`TestTemplateInvocationContextProvider`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html)拡張APIは、異なるコンテキストであるもののテストのようなメソッドの反復的な呼び出しに依存する異なる種類のテストの実装を第一に意図していますー例えば、異なるパラメータを用いたり、テストクラスインスタンスを異なる方法で準備したり、コンテキストを修正せずに複数回行うなどです。この拡張ポイントを機能に提供するのに使う[`繰り返しテスト`]()か[`パラメータ化テスト`]()を参照してください。
+
+## 5.9. 拡張内で状態を保持する
+通常、拡張は一度だけインスタンス化されます。そのため、ある質問が関連性を持ってきます：拡張のある呼び出しからの状態はどのようにして次の呼び出しに保持するのか？`ExtensionContext`APIは、まさにこの目的のための`Store`を提供します。拡張は、後からの収集のためにストアに値を入れます。メソッドレベルスコープでの`Store`の使用例は、[`タイミング拡張`]()をご覧ください。テスト実行中に`ExtensionContext`に貯蔵された値は、周囲の`ExtensionContext`では利用できないことに注意してください。`ExtensionContext`はネストされているかもしれないので、インナーコンテキストのスコープもまた限定的となっています。[`Store`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/ExtensionContext.Store.html)を通した値の貯蔵と収集に利用可能なメソッドの詳細については対応するJavaDocをご覧ください。
+
+> :information_source: `ExtensionContext.Store.CloseableResource` 拡張コンテキスト・ストアは、その拡張コンテキスト・ライフサイクルにバインドされています。拡張コンテキスト・ライフサイクルが終了するとき、結びついているストアも閉じます。全ての貯蔵された値は、`CloseableResource`のインスタンスで、`close()`メソッドの呼び出しによって通知されます。
+
+## 5.10. 拡張でサポートしているユーティリティ
+`AnnotationSupport`は、staticなユーティリティメソッドを提供しており、アノテーションの付与された要素（つまり、パッケージやアノテーション、クラス、インターフェイス、メソッド、そしてフィールドです）を操作することができます。これらは、ある要素に特定のアノテーションが付与、またはメタ付与されているか確認したり、特定のアノテーションを検索したり、クラスやインターフェイス内でアノテーション付与されているメソッドとフィールドを探し出すためのメソッドが含まれています。これらのメソッドのいくつかは、実装されたインターフェイスとクラス階層内をアノテーションを見つけるために捜索します。[`AnnotationSupport`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/commons/support/AnnotationSupport.html)のさらなる詳細については、JavaDocをご覧ください。
+
+### 5.10.2. クラスサポート
+`ClassSupport`は、クラス（つまり、`java.lang.Class`のインスタンス）に作動するstaticなユーティリティメソッドを提供しています。[`ClassSupport`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/commons/support/ClassSupport.html)のさらなる詳細については、JavaDocをご覧ください。
+
+### 5.10.3. リフレクションサポート
+`ReflectionSupport`は、標準のJDKリフレクションとクラス読み込みメカニズムを増強するためのstaticなユーティリティメソッドを提供しています。これらは、特定の述語にマッチするクラスを探すためにクラスパスをスキャンしたり、クラスの新しいインスタンスを読み込んで生成したり、メソッドを見つけて呼び出すためのメソッドを含みます。これらのメソッドのいつくかは、マッチするメソッドの位置を特定するためにクラス階層を横断します。[`ReflectionSupport`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/commons/support/ReflectionSupport.html)のさらなる詳細については、JavaDocをご覧ください。
+
+## 5.11. ユーザコードと拡張の相対実行順
