@@ -34,7 +34,7 @@ JUnit Jupiterは、テストの設定やフレームワークの拡張のため�
 |`@AfterEach`|現在のクラス内にある**各テスト**（`@Test`, `@RepeatedTest`, `@ParameterizedTest`, `@TestFactory`）が実行された*後*（*after*）に実行されるメソッドを意味します。JUnit 4の`@After`と類似したものです。メソッドは*オーバーライド*されない限り、*継承*されます。|
 |`@BeforeAll`|現在のクラス内にある**全テスト**（`@Test`, `@RepeatedTest`, `@ParameterizedTest`, `@TestFactory`）が実行される*前*（*before*）に実行されるメソッドを意味します。JUnit 4の`@BeforeClass`と類似したものです。メソッドは*隠される*か*オーバーライド*されない限り、*継承*され、`static`でないといけません("クラスごと"[テストインスタンス・ライフサイクル]()を使わない限り)。|
 |`@AfterAll`|現在のクラス内にある**全テスト**（`@Test`, `@RepeatedTest`, `@ParameterizedTest`, `@TestFactory`）が実行された*後*（*after*）に実行されるメソッドを意味します。JUnit 4の`@AfterClass`と類似したものです。メソッドは*隠される*か*オーバーライド*されない限り、*継承*され、`static`でないといけません("クラスごと"[テストインスタンス・ライフサイクル]()を使わない限り)。|
-|`@Nested`|ネストされたnon-staticなテストクラスであることを意味します。`@BeforeAll`と`@AfterAll`メソッドは、"クラスごと"[テストインスタンス・ライフサイクル](https://junit.org/junit5/docs/current/user-guide/#writing-tests-test-instance-lifecycle)を使わない限り、`@Nested`クラスの中では直接使うことができません。メソッドは*継承*されません。|
+|`@Nested`|ネストされたnon-staticなテストクラスであることを意味します。`@BeforeAll`と`@AfterAll`メソッドは、"クラスごと"[テストインスタンス・ライフサイクル]()を使わない限り、`@Nested`クラスの中では直接使うことができません。メソッドは*継承*されません。|
 |`@Tag`|テストをクラスレベル、もしくはメソッドレベルでフィルタリングするための*タグ*を宣言することができます。TestNGのtest groups、もしくはJUnit 4のCategoriesと類似したものです。アノテーションはクラスレベルでは*継承*されますが、メソッドレベルでは*継承*されません。|
 |`@Disabled`|テストクラス、もしくはテストメソッドを*無効化*することができます。JUnit 4の`@Ignore`と類似したものです。アノテーションは*継承*されません。|
 |`@ExtendWith`|カスタム[拡張]()を登録することができます。アノテーションは*継承*されます。|
@@ -532,7 +532,7 @@ JUnit Jupiterは、[`@EnabledIf`](https://junit.org/junit5/docs/5.2.0/api/org/j
 
 > :bulb: もしスクリプトのロジックが、今使っているOSか、JREのバージョン、またはあるJVMシステムプロパティや環境変数に依存している場合、その目的に合ったビルトインアノテーションを使うといいかもしれません。詳細については、この章の前のセクションをご覧ください。
 
-> :information_source: もし同じスクリプトベースの条件を多数使っている場合、より速く、型安全で、メンテナンスのしやすい条件を実装するために、それに合った[実行条件](https://junit.org/junit5/docs/current/user-guide/#extensions-conditions)拡張を書くことを考えてみてください。
+> :information_source: もし同じスクリプトベースの条件を多数使っている場合、より速く、型安全で、メンテナンスのしやすい条件を実装するために、それに合った[実行条件]()拡張を書くことを考えてみてください。
 
 ```java
 @Test // Static JavaScript expression.
