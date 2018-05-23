@@ -10,9 +10,9 @@
 
 ***JUnit 5 = JUnit Platform + JUnit Jupiter + JUnit Vintage***
 
-**JUnit Platform**は、JVM上で[テスティングフレームワークを起動させる]()ための基礎として作動します。また、プラットフォーム上で走るテスティングフレームワークを開発するための [`TestEngine`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/engine/TestEngine.html) APIを定義しています。さらに、プラットフォーム上でどのような`TestEngine`でも実行するために、[JUnit 4ベースのRuunner]()と同様に、コマンドラインからプラットフォームを立ち上たり、[Gradle]()や[Maven]()のためのプラグインを構築するための[`Console Launher`]()を提供します。
+**JUnit Platform**は、JVM上で[テスティングフレームワークを起動させる](#junit-platformラウンチャーapi)ための基礎として作動します。また、プラットフォーム上で走るテスティングフレームワークを開発するための[`TestEngine`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/engine/TestEngine.html) APIを定義しています。さらに、プラットフォーム上でどのような`TestEngine`でも実行するために、[JUnit 4ベースのRuunner](#junit-4を用いてjunit-platformを実行する)と同様に、コマンドラインからプラットフォームを立ち上たり、[Gradle](#gradle)や[Maven](#maven)のためのプラグインを構築するための[`コンソールラウンチャー`](#コンソールラウンチャー)を提供します。
 
-**JUnit Jupiter**は、JUnit 5でテストを書いたり拡張するための新しい[プログラミングモデル]()と[拡張モデル]()の組み合わせです。Jupiterのサブプロジェクトは、プラットフォーム上でJupiterベースのテストを実行するための`TestEngine`を提供します。
+**JUnit Jupiter**は、JUnit 5でテストを書いたり拡張するための新しい[プログラミングモデル](#テストを書く)と[拡張モデル](#拡張モデル)の組み合わせです。Jupiterのサブプロジェクトは、プラットフォーム上でJupiterベースのテストを実行するための`TestEngine`を提供します。
 
 **JUnit Vintage**は、プラットフォーム上でJUnit3とJUnit4ベースのテストを実行するための`TestEngine`を提供します。
 
