@@ -128,7 +128,7 @@ test {
 ### 4.2.2. Maven
 JUnitチームは、`mvn test`を通してJUnit 4とJUnit Jupiterのテストを実行できるようなMaven Surefireのための基本的なプロバイダを開発しました。[junit5-jupiter-starter-maven](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-starter-maven)内の`pom.xml`ファイルは、どのようにプロバイダを使い、開始ポイントとして使うかを示しています。
 
-> :information_source: Maven Surefire 2.21.0 と `unit-platform-surefire-provider` を使ってください。
+> ℹ️ Maven Surefire 2.21.0 と `unit-platform-surefire-provider` を使ってください。
 
 ```xml
 ...
@@ -331,7 +331,7 @@ Maven Surefire Pluginは次のパターンにマッチする完全修飾クラ�
 
 `junitlauncher`タスクは[リソース・コレクション](https://ant.apache.org/manual/Types/resources.html#collection)のようなネイティブなAnt構造になるべく近い形で、ユーザがテストエンジンに実行してほしいテストを選べるようにしています。これによって、タスクに他のAntのコアなタスクと比べて一貫して自然な感じを与えています。
 
-> :information_source: Ant 1.10.3にある`junitlauncher`タスクのバージョンは、JUnit Platformを開始するための基本的で最小のサポートを提供しています。追加的な機能強化（分離したJVMへのテスト分岐のサポートも含む）が次のAntのリリースで利用可能になる予定です。
+> ℹ️ Ant 1.10.3にある`junitlauncher`タスクのバージョンは、JUnit Platformを開始するための基本的で最小のサポートを提供しています。追加的な機能強化（分離したJVMへのテスト分岐のサポートも含む）が次のAntのリリースで利用可能になる予定です。
 
 [`junit5-jupiter-starter-ant`](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-starter-ant)プロジェクト内の`build.xml`は、どのようにタスクを使い、開始ポイントとして使うかを示しています。
 
@@ -416,7 +416,7 @@ Test run finished after 64 ms
 [         0 tests failed          ]
 ```
 
-> :information_source: *Exitコード* [`ConsoleLauncher`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/console/ConsoleLauncher.html)は、何らかのコンテナかテスト失敗があった時にステータスコード・1、そうでない時ステータスコード・0を返します。
+> ℹ️ *Exitコード* [`ConsoleLauncher`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/console/ConsoleLauncher.html)は、何らかのコンテナかテスト失敗があった時にステータスコード・1、そうでない時ステータスコード・0を返します。
 
 ### 4.3.1. オプション
 
@@ -498,7 +498,7 @@ Test run finished after 64 ms
 
 `@RunWith(JUnitPlatform.class)`アノテーションをクラスに付与することで、JUnit 4をサポートしているもののJUnit PlatformはまだサポートしていないIDEやビルドシステムであっても実行されることができます。
 
-> :information_source: JUnit PlatformはJUnit 4にはない特徴を持っているので、そのランナーはJUnit Platformのサブセットのみをサポートしています。特に、レポート機能についてが当てはまります（[表示名vs技術的な名称]()をご覧ください）。しかし、さしあたり`JUnitPlatform`ランナーはとっかかりやすい方法です。
+> ℹ️ JUnit PlatformはJUnit 4にはない特徴を持っているので、そのランナーはJUnit Platformのサブセットのみをサポートしています。特に、レポート機能についてが当てはまります（[表示名vs技術的な名称]()をご覧ください）。しかし、さしあたり`JUnitPlatform`ランナーはとっかかりやすい方法です。
 
 ### 4.4.1. セットアップ
 次の生成物とそれらの依存関係がクラスパスに必要です。グループID、アーティファクトID、バージョンに関する詳細は[依存関係のメタデータ]()をご覧ください。
@@ -567,7 +567,7 @@ public class JUnit4SuiteDemo {
 
 `JUnit4SuiteDemo`は、`example`パッケージとサブパッケージ内にある全てのテストを発見・実行します。デフォルトでは、`Test`で始まるか、`Test`もしくは`Tests`で終わる名前を持つテストクラスのみが含まれます。
 
-> :information_source: *追加的な設定オプション* ただの`@SelectPackages`よりも多くのテスト発見・フィルタリング用の設定オプションがあります。詳細については、[Javadoc](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/suite/api/package-summary.html)をご覧ください。
+> ℹ️ *追加的な設定オプション* ただの`@SelectPackages`よりも多くのテスト発見・フィルタリング用の設定オプションがあります。詳細については、[Javadoc](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/suite/api/package-summary.html)をご覧ください。
 
 ## 4.5. 設定パラメータ
 プラットフォームに、インクルードするべきテストクラスとテストエンジンやスキャンするべきパッケージ等を知らせるのに加えて、時々、特定のテストエンジン、もしくは登録した拡張に特化した追加的なカスタム設定パラメータの提供が必要なことがあります。例えば、JUnit Jupiter `TestEngine`は次のユースケースのための*設定パラメータ*をサポートしています。
@@ -585,7 +585,7 @@ public class JUnit4SuiteDemo {
 2. JVMシステムプロパティ
 3. JUnit Platform設定ファイル：`junit-platform.properties`という名前で、クラスパスのルートに置かれたJava `Properties`ファイルのシンタックス規則に従ったファイル
 
-> :information_source: 設定パラメータは上で定義された順に見られます。結果として、`Launcher`に直接供給された設定パラメータは、システムプロパティと設定ファイルを通して供給されたパラメータよりも優先して使われます。同じように、システムプロパティを通して供給された設定パラメータは、設定ファイルを通して供給された設定パラメータよりも優先して使われます。
+> ℹ️ 設定パラメータは上で定義された順に見られます。結果として、`Launcher`に直接供給された設定パラメータは、システムプロパティと設定ファイルを通して供給されたパラメータよりも優先して使われます。同じように、システムプロパティを通して供給された設定パラメータは、設定ファイルを通して供給された設定パラメータよりも優先して使われます。
 
 ## 4.6. タグ表現
 タグ表現は、ブーリアン（boolean）表現で`!`や`&`、`|`といったオペレータも使われます。さらに、`(`と`)`もオペレータの優先順位を調節するために使われます。

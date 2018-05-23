@@ -46,14 +46,14 @@ class MySecondTests {
 }
 ```
 
-> :information_source: *拡張登録の順番* `@ExtendWith`を通した宣言的に登録された拡張は、ソースコード内で宣言された順番に実行されます。例えば、`MyFirstTests`と`MySecondTests`のテストの実行は、`FooExtension`と`BarExtension`によって、*正確にこの順番によって*、拡張されます。
+> ℹ️ *拡張登録の順番* `@ExtendWith`を通した宣言的に登録された拡張は、ソースコード内で宣言された順番に実行されます。例えば、`MyFirstTests`と`MySecondTests`のテストの実行は、`FooExtension`と`BarExtension`によって、*正確にこの順番によって*、拡張されます。
 
 ### 5.2.2. プログラム的な拡張登録
 開発者は、テストクラスのフィールドに[`@RegisterExtension`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/RegisterExtension.html)を付与することで、*プログラム的に*拡張を登録することができます。
 
 [`@ExtendWith`]()を通して*宣言的に*拡張を登録した場合、概してアノテーション通りにのみ設定できます。それに対して、`@RegisterExtension`を通して拡張を登録した場合、*プログラム的に*拡張することができますー例えば、拡張のコンストラクタやstaticなファクトリメソッド、ビルダーAPIに複数を渡すために使うことができます。
 
-> :information_source: `@RegisterExtension`フィールドは、`private`や`null`（評価時）であってはなりませんが、`static`であってもnon-staticであっても構いません。
+> ℹ️ `@RegisterExtension`フィールドは、`private`や`null`（評価時）であってはなりませんが、`static`であってもnon-staticであっても構いません。
 
 #### Staticフィールド
 もし`@RegisterExtension`フィールドが`static`である場合、拡張は`@ExtendWith`を通したクラスレベルの拡張が登録された後に登録されます。そのような`static拡張`は、拡張API内で実装できることを制限するものではありません。staticフィールドを通して登録された拡張はそのため、`BeforeEachCallback`のようなメソッドレベルの拡張APIと同様に、`BeforeAllCallback`や`AfterAllCallback`、`TestInstancePostProcessor`のようなクラスレベルとインスタンスレベルの拡張APIの実装します。
@@ -175,7 +175,7 @@ class DocumentationDemo {
   - [`AfterEachCallback`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/AfterEachCallback.html)
 - [`AfterAllCallback`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/AfterAllCallback.html)
 
-> :information_source: *複数の拡張APIsを実装する*  拡張の開発者は、これらのインターフェイスのうち、いくつかを1つの拡張内に実装することを選ぶかもしれません。具体的な例については、[`SpringExtension`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)のソースコードをご覧ください。
+> ℹ️ *複数の拡張APIsを実装する*  拡張の開発者は、これらのインターフェイスのうち、いくつかを1つの拡張内に実装することを選ぶかもしれません。具体的な例については、[`SpringExtension`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)のソースコードをご覧ください。
 
 ### 5.6.1. BeforeとAfterのテスト実行コールバック
 [`BeforeAllCallback`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/BeforeAllCallback.html)と[`AfterAllCallback`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/AfterAllCallback.html)は、それぞれテストメソッドが実行される*直前*と*直後*に実行される振る舞いを追加するための`Extension`APIを定義しています。そのように、これらのコールバックは、タイミングよく跡を追う似たようなユースケースによく適しています。もし`@BeforeEach`や`@AfterEach`メソッドの*周り*で呼び出されるコールバックを実装する必要がある場合、代わりに`BeforeEachCallback`と`AfterEachCallback`を実装してください。
@@ -332,7 +332,7 @@ public class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 ## 5.9. 拡張内で状態を保持する
 通常、拡張は一度だけインスタンス化されます。そのため、ある質問が関連性を持ってきます：拡張のある呼び出しからの状態はどのようにして次の呼び出しに保持するのか？`ExtensionContext`APIは、まさにこの目的のための`Store`を提供します。拡張は、後からの収集のためにストアに値を入れます。メソッドレベルスコープでの`Store`の使用例は、[`タイミング拡張`]()をご覧ください。テスト実行中に`ExtensionContext`に貯蔵された値は、周囲の`ExtensionContext`では利用できないことに注意してください。`ExtensionContext`はネストされているかもしれないので、インナーコンテキストのスコープもまた限定的となっています。[`Store`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/ExtensionContext.Store.html)を通した値の貯蔵と収集に利用可能なメソッドの詳細については対応するJavaDocをご覧ください。
 
-> :information_source: `ExtensionContext.Store.CloseableResource` 拡張コンテキスト・ストアは、その拡張コンテキスト・ライフサイクルにバインドされています。拡張コンテキスト・ライフサイクルが終了するとき、結びついているストアも閉じます。全ての貯蔵された値は、`CloseableResource`のインスタンスで、`close()`メソッドの呼び出しによって通知されます。
+> ℹ️ `ExtensionContext.Store.CloseableResource` 拡張コンテキスト・ストアは、その拡張コンテキスト・ライフサイクルにバインドされています。拡張コンテキスト・ライフサイクルが終了するとき、結びついているストアも閉じます。全ての貯蔵された値は、`CloseableResource`のインスタンスで、`close()`メソッドの呼び出しによって通知されます。
 
 ## 5.10. 拡張でサポートしているユーティリティ
 `junit-platform-commons`は、[`org.junit.platform.commons.support`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/commons/support/package-summary.html)という名前のパッケージを公開しています。
