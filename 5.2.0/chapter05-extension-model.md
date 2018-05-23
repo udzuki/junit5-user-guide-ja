@@ -335,6 +335,9 @@ public class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 > :information_source: `ExtensionContext.Store.CloseableResource` 拡張コンテキスト・ストアは、その拡張コンテキスト・ライフサイクルにバインドされています。拡張コンテキスト・ライフサイクルが終了するとき、結びついているストアも閉じます。全ての貯蔵された値は、`CloseableResource`のインスタンスで、`close()`メソッドの呼び出しによって通知されます。
 
 ## 5.10. 拡張でサポートしているユーティリティ
+`junit-platform-commons`は、[`org.junit.platform.commons.support`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/commons/support/package-summary.html)という名前のパッケージを公開しています。
+
+### 5.10.1. アノテーションサポート
 `AnnotationSupport`は、staticなユーティリティメソッドを提供しており、アノテーションの付与された要素（つまり、パッケージやアノテーション、クラス、インターフェイス、メソッド、そしてフィールドです）を操作することができます。これらは、ある要素に特定のアノテーションが付与、またはメタ付与されているか確認したり、特定のアノテーションを検索したり、クラスやインターフェイス内でアノテーション付与されているメソッドとフィールドを探し出すためのメソッドが含まれています。これらのメソッドのいくつかは、実装されたインターフェイスとクラス階層内をアノテーションを見つけるために捜索します。[`AnnotationSupport`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/commons/support/AnnotationSupport.html)のさらなる詳細については、JavaDocをご覧ください。
 
 ### 5.10.2. クラスサポート

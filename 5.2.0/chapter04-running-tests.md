@@ -52,7 +52,7 @@ EclipseでJUnit 5を使うためのさらなる情報については、[Eclipse 
 ### 4.2.1. Gradle
 [バージョン4.6](https://docs.gradle.org/4.6/release-notes.html)から、GradleはJUnit Platform上でのテスト実行を[ネイティブ・サポート](https://docs.gradle.org/current/userguide/java_testing.html#using_junit5)しています。それを有効化するためには、`build.gradle`内の`test`タスク宣言で`useJUnitPlatform()`を指定する必要があります。
 
-```Gradle
+```gradle
 test {
     useJUnitPlatform()
 }

@@ -424,7 +424,7 @@ class DisabledTestsDemo {
 }
 ```
 
-## 3.7. 条件付きテスト実行
+## 3.7. 条件的なテスト実行
 JUnit Jupiterの[実行条件]()拡張APIによって、開発者は、*プログラム的に*コンテナ、またはある条件に基づいたテストを*有効*にしたり*無効*にすることができます。そのような条件の最も単純な例は、`@Disabled`をサポートしているビルトインの[`DisabledCondition`](https://github.com/junit-team/junit5/tree/r5.2.0/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/DisabledCondition.java)です（[テストを不可能にする]()をご覧ください）。`@Disabled`に加えて、JUnit Jupiterは、`org.junit.jupiter.api.condition`パッケージ内の他のいくつかのアノテーションベースの条件もサポートしています。`org.junit.jupiter.api.condition`パッケージによって、開発者は*宣言的に*コンテナやテストを*有効*にしたり*無効*にすることができます。詳細については、次のセクションをご覧ください。
 
 > :bulb: 組み合わせアノテーションのヒント：次のセクションで挙げられている条件アノテーションはどれも、組み合わせアノテーションを作るためのメタアノテーションとして使えるかもしれない。例えば、[@EnabledOnOsのデモ]()にある`@TestOnMac`アノテーションは、どのようにして`@Test`と`@EnableOnOs`を一つの再利用できるアノテーションで結合できるかを示しています。
@@ -1215,7 +1215,7 @@ palindromes(String) ✔
 ### 3.15.1. 引数のソース
 すぐに使えるように、JUnit Jupiterはかなりの数の*ソース*アノテーションを提供しています。次の各セクションはそれぞれ、簡潔な概要とそれぞれの例を提供しています。追加的な情報に関しては、[`org.junit.jupiter.params.provider`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/params/provider/package-summary.html)パッケージのJavaDocを参照してください。
 
-#### `@ValueSouce`
+#### `@ValueSource`
 `@ValueSource`は最も単純なソースの一つです。リテラル値の配列を1つ設定することができ、パラメータ化テスト呼び出しにつき、1つのパラメータを提供することができます。
 
 次のリテラル値の型が`@ValueSource`にサポートされています。
@@ -1654,7 +1654,7 @@ Display name of container ✔
 |{arguments}|完全な引数リスト（CSV形式）|
 |{0}, {1}, ...|各引数|
 
-### ライフサイクルと相互運用性
+### 3.15.5. ライフサイクルと相互運用性
 パラメータ化テストの各呼び出しは、通常の`@Test`メソッドと同じライフサイクルを持っています。例えば、各呼び出し前には`@BeforeEach`メソッドが実行されます。[`動的テスト`]()と同じように、呼び出しはIDEのテストツリーでは一つ一つ表れます。同一のテストクラスに、自由に`@Test`と`@ParameterizedTest`を混ぜることができます。
 
 `@ParameterizedTest`メソッドと合わせて`ParameterResolver`を使うことができます。しかしながら、引数ソースによって解決されたパラメータは、引数リストの最初に来る必要があります。テストクラスは様々なパラメータリストを持つパラメータ化テストと同様に通常のテストクラスを含んでいることもあるので、引数ソースからの値は、`@BeforeEach`といったライフサイクル・メソッドやテストクラスコンストラクタは解決されません。
