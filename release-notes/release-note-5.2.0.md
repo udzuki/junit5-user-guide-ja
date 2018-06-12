@@ -6,7 +6,7 @@
 このリリースに関する全ての*解決済みの*イシューとプル・リクエストの完全なリストに関しては、GitHub上のJUnitレポジトリにあるマイルストーン[`5.2 M1`](https://github.com/junit-team/junit5/milestone/22?closed=1)と[`5.2 RC1`](https://github.com/junit-team/junit5/milestone/25?closed=1)、[`5.2 GA`](https://github.com/junit-team/junit5/milestone/26?closed=1)をご覧ください。
 
 ## 全体的な改善
-- JUnit BOM：[Maven](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies)または[Gradle](https://docs.gradle.org/current/userguide/managing_transitive_dependencies.html#sec:bom_import)を用いた依存関係の管理を容易にするために、*部品表*であるPOMがMavenの`org.junit:junit-bom:5.2.0`以下に提供されています。
+- JUnit BOM：[Maven](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies)または[Gradle](https://docs.gradle.org/current/userguide/managing_transitive_dependencies.html#sec:bom_import)を用いた依存関係の管理を容易にするために、*部品表*であるPOMが`org.junit:junit-bom:5.2.0`のMaven座標以下に提供されています。
 
 ## JUnit Platform
 ### バグ修正
