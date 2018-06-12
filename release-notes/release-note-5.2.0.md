@@ -30,7 +30,7 @@
   - 例えば、`@ValueSource(ints = { 1, 2, 3 })`が付与されたパラメータ化テストは、`int`や`long`、`float`、`double`型の引数を許容するよう宣言されます。
 - `@MethodSource`は、*完全修飾クラス名*によって参照された外部クラスに宣言されている`static`なファクトリメソッドをサポートしています。
 - 複数の`@ParameterizedTest`引数を1つのオブジェクトに集約することをサポートしています。
-  - 詳細については、[引数の集約](https://junit.org/junit5/docs/current/user-guide/index.html#writing-tests-parameterized-tests-argument-aggregation)をご覧ください。
+  - 詳細については、[引数の集約]()をご覧ください。
 
 ## JUnit Vintage
 変更はありません。
