@@ -8,7 +8,7 @@
 - Group ID: `org.junit.platrform`
 - Version: `1.2.0`
 - Articfact IDs:
-    - `junit-platform-commons`：JUnitの内部共通ライブラリ・ユーティリティ。これらのユーティリティは、JUnitフレームワーク自体の中での使用のみが意図されています。*外部パーティからのいかなる使用はサポートされていません。*使用は自身の責任で行ってください！
+    - `junit-platform-commons`：JUnitの内部共通ライブラリ・ユーティリティ。これらのユーティリティは、JUnitフレームワーク内部使用のみが意図されています。*外部パーティからのいかなる使用はサポートされていません。*使用は自身の責任で行ってください！
     - `junit-platform-console`：コンソールからJUnit Platform上でテストを発見し実行することをサポートします。詳細については[Console Launcher]()をご覧ください。
     - `junit-platform-console-standalone`：全ての依存関係が包含された実行可能なJARファイルがMaven Centralの[junit-platform-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone)以下のディレクトリで提供されています。詳細については[Console Launcher]()をご覧ください。
     - `junit-platform-engine`：テストエンジンのパブリックAPIです。詳細については[自分自身のテストエンジンをプラグインする]()をご覧ください。
@@ -31,7 +31,7 @@
 - Group ID: `org.junit.vintage`
 - Version: `5.2.0`
 - Articfact ID:
-    - `junit-vintage-engine`: JUnit Vintageテストエンジンの実装です。かつてのJUnitテスト（つまり、JUnit 3やJUnit 4形式で書かれたテスト）を新しいJUnit Platform上で実行することができます。
+    - `junit-vintage-engine`: JUnit Vintageテストエンジンの実装です。かつてのJUnitテスト（つまり、JUnit 3やJUnit 4形式で書かれたテスト）を新しいJUnit Platform上で実行できます。
 
 ### 2.1.4. 部品表
 次のMaven座標以下で提供されている *部品表* POMは、[Maven](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies)や[Gradle](https://docs.gradle.org/current/userguide/managing_transitive_dependencies.html#sec:bom_import)を用いて複数の上記アーティファクトを参照する際に、依存関係管理を容易にするために利用できます。
