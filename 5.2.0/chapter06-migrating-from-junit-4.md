@@ -1,7 +1,7 @@
 # JUnit 4からの移行
-JUnit JUpiterのプログラミングモデルと拡張モデルは、JUnit 4の`Rules`や`Runners`といった特徴をネイティブではサポートしていませんが、ソースコード保守運用者が全ての既存のテストやテスト拡張、カスタムビルド・テストインフラをJUnit JUpiterに移行するためにアップデートする必要があることは期待していません。
+JUnit JUpiterのプログラミングモデルと拡張モデルは、JUnit 4の`Rules`や`Runners`といった特徴をネイティブではサポートしていませんが、ソースコード保守運用者が全ての既存のテストやテスト拡張、カスタムされたビルド・テスト基盤をJUnit JUpiterに移行するためにアップデートする必要があることは期待していません。
 
-代わりに、JUnitは、JUnit Platformのインフラを用いてJUnit 3とJUnit 4ベースのテストを実行できる*JUnit Vintageテストエンジン*を通して、寛大な移行経路を提供しています。JUnit JUpiterに特化したクラスとアノテーションは全て新しい`org.junit.jupiter`ベースパッケージ以下にあるので、クラスパス上にあるJUnit 4とJUnit Jupiterはいずれもコンフリクトを起こしません。そのため、JUnit JUpiterテストと一緒に既存のJUnit 4のテストを保守することは安全です。さらに、JUnitチームはJUnit 4.xベースラインの保守とバグ修正に関するリリースを提供し続けるので、開発者はスケジュール上ではJUnit Jupiter移行のための時間が多くあります。
+代わりに、JUnitは、JUnit Platformの基盤を用いてJUnit 3とJUnit 4ベースのテストを実行できる*JUnit Vintageテストエンジン*を通して、寛大な移行経路を提供しています。JUnit JUpiterに特化したクラスとアノテーションは全て新しい`org.junit.jupiter`ベースパッケージ以下にあるので、クラスパス上にあるJUnit 4とJUnit Jupiterはいずれもコンフリクトを起こしません。そのため、JUnit JUpiterテストと一緒に既存のJUnit 4のテストを保守することは安全です。さらに、JUnitチームはJUnit 4.xベースラインの保守とバグ修正に関するリリースを提供し続けるので、開発者はスケジュール上ではJUnit Jupiter移行のための時間が多くあります。
 
 ## 6.1. JUnit Platform上でのJUnit 4テストの実行
 `junit-vintage-engine`アーティファクトがテストの実行時のパスにあるか確認するだけです。そのような場合、JUnit 3とJUnit 4のテストは、JUnit Platformラウンチャーによって自動的に拾われます。
