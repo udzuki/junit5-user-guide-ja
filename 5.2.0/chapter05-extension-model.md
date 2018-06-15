@@ -344,7 +344,7 @@ public class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 `ClassSupport`は、クラス（つまり、`java.lang.Class`のインスタンス）に作動する静的なユーティリティメソッドを提供しています。さらなる詳細については、[`ClassSupport`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/commons/support/ClassSupport.html)のJavaDocをご覧ください。
 
 ### 5.10.3. リフレクションのサポート
-`ReflectionSupport`は、標準のJDKリフレクションとクラス読み込み機構を増強するための静的なユーティリティメソッドを提供しています。これらは、特定の述語にマッチするクラスを探すためにクラスパスをスキャンしたり、クラスの新しいインスタンスを読み込んで生成したり、メソッドを見つけて呼び出すためのメソッドを含みます。これらのメソッドのいつくかは、マッチするメソッドの位置を特定するためにクラス階層を捜査します。さらなる詳細については、[`ReflectionSupport`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/commons/support/ReflectionSupport.html)のJavaDocをご覧ください。
+`ReflectionSupport`は、標準のJDKリフレクションとクラス読み込み機構を増強するための静的なユーティリティメソッドを提供しています。これらは、特定の述語にマッチするクラスを探すためにクラスパスをスキャンしたり、クラスの新しいインスタンスを読み込んで生成したり、メソッドを見つけて呼び出すためのメソッドを含みます。これらのメソッドのいつくかは、マッチするメソッドの位置を特定するためにクラス階層を走査します。さらなる詳細については、[`ReflectionSupport`](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/commons/support/ReflectionSupport.html)のJavaDocをご覧ください。
 
 ## 5.11. ユーザコードと拡張の相対実行順序
 1つ以上のテストメソッドを含むテストクラスを実行する時、ユーザの提供するテストとライフサイクルに関するメソッドに加えて、いくつかの拡張コールバックが呼び出されます。次の図は、ユーザ提供のコードと拡張コードの相対順序を示しています。
