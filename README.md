@@ -1,7 +1,7 @@
 # JUnit 5 User Guide 日本語版
 このレポジトリは、JUnit 5 User Guide 日本語版のためののものです。
 
-日本語版：https://udzuki.jp/junit5/user-guide-ja/
+日本語版：https://udzuki.jp/public/junit5-user-guide-ja/
 
 英語版（オリジナル）：http://junit.org/junit5/docs/current/user-guide/
 
