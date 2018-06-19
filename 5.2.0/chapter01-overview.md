@@ -3,7 +3,7 @@
 
 このドキュメントは[PDF](https://junit.org/junit5/docs/5.2.0/user-guide/index.pdf)でも利用可能です。
 
-> 💡 *翻訳* このドキュメントは[簡体字中国語](http://sjyuan.cc/junit5/user-guide-cn/)でも利用可能です。
+> 💡 *翻訳* このドキュメントは[簡体字中国語](http://sjyuan.cc/junit5/user-guide-cn/)と[日本語](https://udzuki.jp/public/junit5-user-guide-ja/)でも利用可能です。
 
 ## 1.1. JUnit 5とは？
 これまでのバージョンのJUnitとは異なり、JUnit 5は3つのサブプロジェクトで開発されている様々なモジュールから構成されています。
