@@ -11,7 +11,7 @@ GradleとMavenでの実施方法は、[`jnit5-samples`](https://github.com/junit
 ### 6.1.1. カテゴリのサポート
 `@Category`が付与されたテストクラスとメソッドに関して、*JUnit Vintageテストエンジン*はカテゴリの完全修飾クラス名を対応するテスト識別子のタグとして扱います。例えば、テストメソッドに`@Category(Example.class)`が付与されている場合、`"com.acme.Example"`のタグが付与されます。JUnit 4の`Categories`ランナーと同じように、この情報は発見されたテストが実行される前にフィルタリングされるのに使われます（詳細については[テストを実行する]()をご覧ください）。
 
-## 移行のためのチップス
+## 移行のためのTips
 次は、既存のJUnit 4のテストをJUnit Jupiterに移行する際に気をつけるべきことです。
 
 - `org.junit.jupiter.api`パッケージ内のアノテーション

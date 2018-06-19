@@ -326,7 +326,7 @@ JUnit Jupiterによって提供されているアサーション機能は多く�
 
 例えば、*matchers*と流暢なAPI（fluent API）の組み合わせは、アサーションをよりわかりやすく、読みやすくするために使うことができます。しかしながら、JUnit Jupiterの[`org.junit.jupiter.Assertions`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/Assertions.html)クラスは、Hamcrestの[`Matcher`](http://junit.org/junit4/javadoc/latest/org/hamcrest/Matcher.html)を許容しているJUnit 4の`org.junit.jupiter.Assert`クラスにあるような`assertThat()`メソッドを提供していません。代わりに、開発者はサードパーティのアサーションライブラリによって提供されているマッチャー用の組み込みサポートを使うことが奨励されています。
 
-次の例は、JUnit JupiterのテストにおいてHamcrestからの`assertThat()`サポートを使い方を説明しています。Hamcrestライブラリがクラスパスに加えられている限り、`assertThat()`や`is()`、`equalTo()`といったメソッドを静的にインポートできます。また、それらをテストの中で、下に示す`assertWithHamcrestMatcher()`のように使うことができます。
+次の例は、JUnit JupiterのテストにおいてHamcrestから`assertThat()`のサポートを使う方法を説明しています。Hamcrestライブラリがクラスパスに加えられている限り、`assertThat()`や`is()`、`equalTo()`といったメソッドを静的にインポートできます。また、それらをテストの中で、下に示す`assertWithHamcrestMatcher()`のように使うことができます。
 
 ```java
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -578,7 +578,7 @@ void theDayAfterTomorrow() {
 ```
 
 #### スクリプトバインディング
-次の名前は、各スクリプトコンテキストでバインドされているめ、スクリプト内で使用可能です。*accessor*は、単純な `String get(String name)`メソッドを介してマップライク（map-like）な構造へのアクセスを提供します。
+次の名前は、各スクリプトコンテキストでバインドされているため、スクリプト内で使用可能です。*accessor*は、単純な `String get(String name)`メソッドを介してマップライク（map-like）な構造へのアクセスを提供します。
 
 |Name|Type|Description|
 |---|---|---|
@@ -740,7 +740,7 @@ class TestingAStackDemo {
 }
 ```
 
-> ℹ️ *非静的なネストされたクラス（つまり、内部クラス）のみ*が`@Nested`テストクラスとなります。ネストは任意に深くすることができ、それら内部クラスは一つの例外を除いて、テストクラスの完全なメンバーとして考えられます。例外は`@BeforeAll`と`@AfterAll`で、*デフォルト*では動作しません。その理由は、Javaが内部クラスに`static`なメンバーを許さないためです。しかしながら、この制限は`@Nested`テストクラスに`@TestInstance(Lifecycle.PER_CLASS)`を付与することで回避できます（[テストインスタンス・ライフサイクル]()をご覧ください）。
+> ℹ️ *非静的なネストされたクラス（つまり、内部クラス）のみ*が`@Nested`テストクラスとなります。ネストは任意に深くすることができ、それら内部クラスは一つの例外を除いて、テストクラスの完全なメンバーとして考えられます。例外は`@BeforeAll`と`@AfterAll`で、これらは*デフォルト*では動作しません。その理由は、Javaが内部クラスに`static`なメンバーを許さないためです。しかしながら、この制限は`@Nested`テストクラスに`@TestInstance(Lifecycle.PER_CLASS)`を付与することで回避できます（[テストインスタンス・ライフサイクル]()をご覧ください）。
 
 ## 3.11. コンストラクタとメソッドへの依存性注入
 JUnitの前バージョン全てにおいて、テストコンストラクタまたはメソッドは（少なくとも標準的な`Runner`実装を用いる場合は）パラメータを持つことが許されていませんでした。JUnit Jupiterでの大きな変更の1つとして、テストコンストラクタとメソッドどちらもパラメータを持てるようになりました。このことは、大きな柔軟性をもたらし、コンストラクタとメソッドに*依存性の注入*が可能になりました。
@@ -750,6 +750,7 @@ JUnitの前バージョン全てにおいて、テストコンストラクタま
 現在は、3つの組み込みリゾルバが自動的に登録されます。
 
 - [`TestInfoParameterResolver`](https://github.com/junit-team/junit5/tree/r5.2.0/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)：メソッドパラメータが[`TestInfo`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/TestInfo.html)型の場合、`TestInfoParameterResolver`はパラメータの値として現在のテストに応じた`TestInfo`のインスタンスを供給します。`TestInfo`は、テストの表示名、テストクラス、テストメソッド、関連付けられたタグ名といった現在のテストに関する情報を集めるのに使うことができます。表示名は、テストクラスまたはテストメソッドの名前といった技術的な名前か、`@DisplayedName`で設定されたカスタム名のどちらかです。
+
 [`TestInfo`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/TestInfo.html)は、JUnit 4の`TestName`規則の代替として動作します。次のコードは、テストコンストラクタと`@BeforeEach`メソッド、`@Test`メソッドに`TestInfo`を注入させる方法を示しています。
 
 ```java
@@ -843,7 +844,7 @@ class MyRandomParametersTest {
 現実的なユースケースとして、[`MockitoExtension`](https://github.com/mockito/mockito/blob/release/2.x/subprojects/junit-jupiter/src/main/java/org/mockito/junit/jupiter/MockitoExtension.java)と[`SpringExtension`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)のソースコードを確認してください。
 
 ## 3.12. テストインターフェイスとデフォルトメソッド
-JUnit Jupiterは、`@Test`と`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory`、`@TestTemplate`、`@BeforeEach`、`@AfterEach`にインターフェイスに`default`メソッドを宣言できるようにしています。`@BeforeAll`と`@AfrterAll`はテストインターフェイス内で`static`メソッドを宣言するか、*もし*テストインターフェイスまたはテストクラスに`@TestInstance(Lifecycle.PER_CLASS)`が付与されている場合はインターフェイス`default`メソッドを宣言することができます（[テストインスタンス・ライフサイクル]()をご覧ください）。いくつかの例を示します。
+JUnit Jupiterは、`@Test`と`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory`、`@TestTemplate`、`@BeforeEach`、`@AfterEach`にインターフェイスの`default`メソッドを宣言できるようにしています。`@BeforeAll`と`@AfrterAll`はテストインターフェイス内で`static`メソッドを宣言するか、*もし*テストインターフェイスまたはテストクラスに`@TestInstance(Lifecycle.PER_CLASS)`が付与されている場合はインターフェイス`default`メソッドを宣言することができます（[テストインスタンス・ライフサイクル]()をご覧ください）。いくつかの例を示します。
 
 ```java
 @TestInstance(Lifecycle.PER_CLASS)
@@ -1009,7 +1010,7 @@ public interface ComparableContract<T extends Comparable<T>> extends Testable<T>
 }
 ```
 
-テストクラスでは、2つ契約インターフェイスを実装することで、対応するテストを継承します。もちろん、抽象メソッドを実装する必要があります。
+テストクラスでは、2つの契約インターフェイスを実装することで、対応するテストを継承します。もちろん、抽象メソッドを実装する必要があります。
 
 ```java
 class StringTests implements ComparableContract<String>, EqualsContract<String> {
@@ -1216,7 +1217,7 @@ palindromes(String) ✔
 この文脈で、*インデックスされた引数*とは、`ArgumentsProvider`によって提供される`Arguments`内で与えられたインデックスに対応する引数です。`ArgumentsProvider`は、パラメータ化メソッドが保持する形式的なパラメータリストにおいて同じインデックスにあるメソッドに引数として渡されます。*アグリゲータ*は、`ArgumentsAccessor`型または`@AggregateWith`の付与されたパラメータです。
 
 ### 3.15.1. 引数のソース
-すぐに使えるように、JUnit Jupiterはごく少数の*ソース*アノテーションを提供しています。次の各章はそれぞれ、簡潔な概要とそれぞれの例を提供しています。さらなる情報に関しては、[`org.junit.jupiter.params.provider`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/params/provider/package-summary.html)パッケージのJavaDocを参照してください。
+すぐに使えるように、JUnit Jupiterは非常に多くの*ソース*アノテーションを提供しています。次の各章はそれぞれ、簡潔な概要とそれぞれの例を提供しています。さらなる情報に関しては、[`org.junit.jupiter.params.provider`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/params/provider/package-summary.html)パッケージのJavaDocを参照してください。
 
 #### `@ValueSource`
 `@ValueSource`は最も単純なソースの1つです。リテラル値の配列を1つ設定することができ、パラメータ化テスト呼び出しにつき、1つのパラメータを提供できます。
@@ -1488,7 +1489,7 @@ void testWithImplicitArgumentConversion(TimeUnit argument) {
 #### StringからObjectへの予備的な変換
 Stringから上に列挙されている対象型への暗示的な変換に加えて、JUnit Jupiterでは、対象型が下の定義に合致した*ファクトリーメソッド*または*ファクトリーコンストラクタ*を宣言する場合、`String`をその対象型へ自動変換する予備的な機構を提供します。
 
-- *ファクトリーメソッド*：対象型で宣言されている非プリミティブかつ`static`なメソッドで、1つの`String`引数を取り、対象型のインスタンスを返すもの。メソッド名は任意であり、特定の慣習にも従う必要はありません。
+- *ファクトリーメソッド*：対象型で宣言されている非プライベートかつ`static`なメソッドで、1つの`String`引数を取り、対象型のインスタンスを返すもの。メソッド名は任意であり、特定の慣習にも従う必要はありません。
 - *ファクトリーコンストラクタ*：対象型のプライベートでないコンストラクタで、1つの`String`引数を取るもの。
 
 > ℹ️ 複数の*ファクトリーメソッド*が見つかった場合、それらは無視されます。*ファクトリーメソッド*と*ファクトリーコンストラクタ*が見つかった場合、ファクトリーメソッドがコンストラクタの代わりに使われます。
@@ -1542,7 +1543,7 @@ public class ToStringArgumentConverter extends SimpleArgumentConverter {
 }
 ```
 
-明示的な引数変換は、テストと拡張の開発者によって実装される必要があります。そのため、`junit-jupiter-params`では、参照実装として使える明示的な引数変換器：`JavaTimeArgumentConverter`を提供しています。合成アノテーション`であるJavaTimeConversionPattern`を通して使うことができます。
+明示的な引数変換は、テストと拡張の開発者によって実装される必要があります。そのため、`junit-jupiter-params`では、参照実装として使える明示的な引数変換器：`JavaTimeArgumentConverter`を提供しています。合成アノテーションである`JavaTimeConversionPattern`を通して使うことができます。
 
 ```java
 @ParameterizedTest
@@ -1584,10 +1585,10 @@ void testWithArgumentsAccessor(ArgumentsAccessor arguments) {
 
 `ArgumentsAccessor`*のインスタンスは、*`ArgumentsAccessor`*型のいかなるパラメータに自動的に挿入されます*。
 
-#### カスタム集約器
-`ArgumentsAccessor`を用いた`@ParameterizedTest`メソッドの引数への直接アクセスとは別に、JUnit Jupiterはカスタムで再利用可能な*集約器*の使用もサポートしています。
+#### カスタムアグリゲータ
+`ArgumentsAccessor`を用いた`@ParameterizedTest`メソッドの引数への直接アクセスとは別に、JUnit Jupiterはカスタムで再利用可能な*アグリゲータ*の使用もサポートしています。
 
-カスタム集約器を使うためには、単に[`ArgumentAggregator`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/params/aggregator/ArgumentsAggregator.html)インターフェイスを実装し、`@ParameterizedTest`メソッド内で互換可能なパラメータに対して`@AggregateWith`アノテーションを付与して登録するだけです。集約の結果は、パラメータ化テストが呼び出された時に、対応するパラメータへの引数として提供されます。
+カスタムアグリゲータを使うためには、単に[`ArgumentAggregator`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/params/aggregator/ArgumentsAggregator.html)インターフェイスを実装し、`@ParameterizedTest`メソッド内で互換可能なパラメータに対して`@AggregateWith`アノテーションを付与して登録するだけです。集約の結果は、パラメータ化テストが呼び出された時に、対応するパラメータへの引数として提供されます。
 
 ```java
 @ParameterizedTest
@@ -1688,7 +1689,7 @@ void afterEach(TestInfo testInfo) {
 
 これらの標準的なテストに加えて、全く新しい種類のテストプログラミングモデルがJUnit Jupiterでは導入されました。この新しいテストとは、*動的テスト*です。動的テストは、`@TestFactory`が付与されたファクトリーメソッドによって、実行時に生成されます。
 
-`@Test`メソッドとは対照的に、`@TestFactory`メソッド自身はテストケースではなく、むしろテストケースのためのファクトリーです。そのため、動的テストはファクトリーの産出物となります。技術的なことを言うと、`@TestFactory`メソッドは、`DynamicNode`インスタンスの`Stream`または`Collection`、`Iterable`、`Iterator`を返さなければなりません。`DynamicNode`のインスタンス化可能なサブクラスは`DynamicContainer`と`DynamicTest`です。`DynamicContainer`インスタンスは、*表示名*と動的な子ノードのリストで構成されており、動的なノードの任意なネスト階層を生成できます。`DynamicTest`インスタンスは、遅延実行され、テストケースを動的で非決定的な生成が可能となります。
+`@Test`メソッドとは対照的に、`@TestFactory`メソッド自身はテストケースではなく、むしろテストケースのためのファクトリーです。そのため、動的テストはファクトリーの産出物となります。技術的なことを言うと、`@TestFactory`メソッドは、`DynamicNode`インスタンスの`Stream`または`Collection`、`Iterable`、`Iterator`を返さなければなりません。`DynamicNode`のインスタンス化可能なサブクラスは`DynamicContainer`と`DynamicTest`です。`DynamicContainer`インスタンスは、*表示名*と動的な子ノードのリストで構成されており、動的なノードの任意なネスト階層を生成できます。`DynamicTest`インスタンスは、遅延実行され、テストケースの動的で非決定的な生成が可能となります。
 
 `@TestFactory`によって返される`Stream`はいずれも、`stream.close()`を呼ぶことで適切に閉じられます。これによって、`Files.lines()`のような資源を安全に使うことができます。
 
