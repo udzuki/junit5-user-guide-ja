@@ -41,7 +41,7 @@
 - Version: `5.2.0`
 
 ### 2.1.5. 依存関係
-次のアーティファクトは全て、次の *@API Guardian JAR*で公開されているMaven POMsに依存関係があります。
+次のアーティファクトは全て、上記の *@API Guardian JAR*で公開されているMaven POMsに依存関係があります。
 - Group ID: `org.apiguardian`
 - Articfact ID: `apiguardian-api`
 - Version: `1.0.0`
