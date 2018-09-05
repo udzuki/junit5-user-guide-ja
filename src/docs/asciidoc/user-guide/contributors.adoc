@@ -1,0 +1,4 @@
+[[contributors]]
+== 貢献者
+
+GitHub上の {junit5-repo}/graphs/contributors[現在の貢献者リスト] を直接ご覧ください。
