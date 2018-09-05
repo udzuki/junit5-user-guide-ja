@@ -1,5 +1,3 @@
-include::../link-attributes.adoc[]
-
 [[migrating-from-junit4]]
 == JUnit 4からの移行
 
