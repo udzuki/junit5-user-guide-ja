@@ -1,0 +1,91 @@
+include::../link-attributes.adoc[]
+
+[[migrating-from-junit4]]
+== JUnit 4からの移行
+
+JUnit Jupiterのプログラミングモデルと拡張モデルは、
+JUnit 4の `Rules` や `Runners` といった特徴をネイティブではサポートしていませんが、
+ソースコード保守運用者が全ての既存のテストやテスト拡張、カスタムされたビルド・テスト基盤を
+JUnit Jupiterに移行するためにアップデートする必要があることは期待していません。
+
+代わりに、JUnitは、JUnit Platformの基盤を用いてJUnit 3とJUnit 4ベースのテストを
+実行できる _JUnit Vintageテストエンジン_ を通して、寛大な移行経路を提供しています。
+JUnit Jupiterに特化したクラスとアノテーションは全て新しい `org.junit.jupiter` ベース
+パッケージ以下にあるので、クラスパス上にあるJUnit 4とJUnit Jupiterは
+いずれもコンフリクトを起こしません。そのため、JUnit Jupiterテストと一緒に
+既存のJUnit 4のテストを保守することは安全です。さらに、JUnitチームはJUnit 4.xベースラインの
+保守とバグ修正に関するリリースを提供し続けるので、開発者はスケジュール上では
+JUnit Jupiter移行のための時間が多くあります。
+
+[[migrating-from-junit4-running]]
+=== JUnit Platform上でのJUnit 4テストの実行
+
+`junit-vintage-engine` アーティファクトがテストの実行時のパスにあるか確認するだけです。
+そのような場合、JUnit 3とJUnit 4のテストは、JUnit Platformラウンチャーによって自動的に拾われます。
+
+GradleとMavenでの実施方法は、
+{junit5-samples-repo}[`junit5-samples`] レポジトリのプロジェクト例をご覧ください。
+
+[[migrating-from-junit4-categories-support]]
+==== カテゴリのサポート
+
+`@Category` が付与されたテストクラスとメソッドに関して、
+_JUnit Vintageテストエンジン_ はカテゴリの完全修飾クラス名を
+対応するテスト識別子のタグとして扱います。
+例えば、テストメソッドに `@Category(Example.class)` が付与されている場合、
+`"com.acme.Example"` のタグが付与されます。
+JUnit 4の `Categories` ランナーと同じように、この情報は発見されたテストが
+実行される前にフィルタリングされるのに使われます
+（詳細については <<running-tests,テストを実行する>> をご覧ください）。
+
+[[migrating-from-junit4-tips]]
+=== 移行のためのTips
+
+次は、既存のJUnit 4のテストをJUnit Jupiterに移行する際に気をつけるべきことです。
+
+* `org.junit.jupiter.api` パッケージ内のアノテーション
+* `org.junit.jupiter.api.Assertions` 内のアサーション
+* `org.junit.jupiter.api.Assumptions` 内のアサンプション
+* `@Before` と `@After` はもうありません。代わりに `@BeforeEach` と `@AfterEach` を使ってください。
+* `@BeforeClass` と `@AfterClass` はもうありません。代わりに `@BeforeAll` と `@AfterAll` を使ってください。
+* `@Ignore` はもうありません。代わりに `@Disabled` を使ってください。
+* `@Category` はもうありません。代わりに `@Tag` を使ってください。
+* `@RunWith` はもうありません。代わりに `@ExtendWith` を使ってください。
+* `@Rule` と `@ClassRule` はもうありません。 `@ExtendWith` によって置換されました。個別のRuleのサポートについては次の章をご覧ください。
+
+[[migrating-from-junit4-rule-support]]
+=== JUnit 4のRuleの限定的なサポート
+
+上で述べたように、JUnit Jupiterは、JUnit 4のRuleを
+ネイティブではサポートしていませんし、これからもしません。
+しかしながら、JUnitチームは、多くの組織（特に、大きい組織）がカスタムRuleを
+利用した巨大なJUnit 4のコードベースを持っていることを理解しています。
+これらの組織に奉仕し、段階的な移行を可能にするために、
+JUnitチームは、言葉通り選択的ですが、いくつかJUnit 4のRuleを
+JUnit Jupiter内でサポートすることを決めました。
+このサポートは、アダプタベースで行われ、JUnit Jupiterの拡張モデルと
+意味的に互換のあるRule（つまり、テスト全体の実行フローを完全には変更しないもの）に
+限定されています。
+
+JUnit Jupiterの `junit-jupiter-migrationsupport` モジュールは、
+現在のところ、次の3つの `Rule` 型とそれらのサブクラスをサポートしています。
+
+* `org.junit.rules.ExternalResource` （ `org.junit.rules.TemporaryFolder` を含む）
+* `org.junit.rules.Verifier` （ `org.junit.rules.ErrorCollector` を含む）
+* `org.junit.rules.ExpectedException`
+
+JUnit 4と同様に、Ruleが付与されたフィールドもメソッド同様にサポートされています。
+これらを使うことで、レガシーコード内の `Rule` 実装のようなテストクラスに
+対するクラスレベルの拡張を、JUnit 4のRuleのインポート文含めて _変更なしで残す_ ことができます。
+
+この限られた形での `Rule` サポートは、クラスレベルのアノテーション
+`org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport` によって
+切り替えできます。このアノテーションは、 _合成アノテーション_ で、
+全ての移行をサポートする拡張（ `VerifierSupport` と `ExternalResourceSupport` 、
+`ExpectedExceptionSupport` ）を有効にします。
+
+しかしながら、JUnit 5に対する新たな拡張を開発する際には、
+JUnit 4のRuleベースのモデルの代わりに、JUnit Jupiterの新しい拡張モデルを使ってください。
+
+WARNING: Junit Jupiter内におけるJUnit 4の `Rule` のサポートは現在のところ、
+_実験的な_ 特徴です。詳細については、 <<api-evolution-experimental-apis, 実験的なAPI>> をご覧ください。
