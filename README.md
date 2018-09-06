@@ -12,5 +12,5 @@
 
 ## ビルド方法
 ```
- $ pandoc -c assets/github.css -s --toc {version}/*.md > {version}.html
+ $ gradle asciidoctor
 ```
