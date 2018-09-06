@@ -9,7 +9,6 @@ ifdef::backend-html5[このドキュメントは link:https://junit.org/junit5/d
 [TIP]
 .Translations
 ====
-
 このドキュメントは http://sjyuan.cc/junit5/user-guide-cn/[簡体字中国語] でも利用可能です。
 ====
 

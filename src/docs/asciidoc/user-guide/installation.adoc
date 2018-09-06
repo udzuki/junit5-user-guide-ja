@@ -100,7 +100,7 @@ https://docs.gradle.org/current/userguide/managing_transitive_dependencies.html#
 
 [[dependency-diagram]]
 === 依存関係図
-image::component-diagram.svg[link=https://junit.org/junit5/docs/5.2.0/user-guide/images/component-diagram.svg]
+image::https://junit.org/junit5/docs/{docs-version}/user-guide/images/component-diagram.svg[Component Diagram]
 
 [[dependency-metadata-junit-jupiter-samples]]
 === JUnit Jupiter サンプルプロジェクト

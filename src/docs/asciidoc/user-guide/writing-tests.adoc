@@ -704,7 +704,8 @@ void theDayAfterTomorrow() {
 [[writing-tests-conditional-execution-scripts-bindings]]
 ===== スクリプトバインディング
 
-次の名前は、各スクリプトコンテキストでバインドされているため、スクリプト内で使用可能です。*accessor*は、単純な `String get(String name)`メソッドを介してマップライク（map-like）な構造へのアクセスを提供します。
+次の名前は、各スクリプトコンテキストでバインドされているため、スクリプト内で使用可能です。
+_accessor_ は、単純な `String get(String name)` メソッドを介してマップライク（map-like）な構造へのアクセスを提供します。
 
 |===
 |Name |Type |Description
@@ -815,7 +816,7 @@ JUnit Platformの設定ファイルを通してデフォルトのテストイン
 
 `junit.jupiter.testinstance.lifecycle.default = per_class`
 
-WARNING: _デフォルト_のテストインスタンス・ライフサイクルモードを変更することは、
+WARNING: _デフォルト_ のテストインスタンス・ライフサイクルモードを変更することは、
 一貫性を持って適用しないと、予測不可能な結果と壊れやすいビルドにつながる恐れがあります。
 例えば、ビルドではデフォルトとして”クラスごと”のセマンティックを設定していながら、
 IDEでのテストでは"メソッドごと"で実行していた場合、ビルドサーバで起きるエラーを

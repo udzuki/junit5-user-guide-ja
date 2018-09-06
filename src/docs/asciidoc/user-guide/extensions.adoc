@@ -12,7 +12,7 @@ JUnit 4において競合している `Runner` と `@Rule` 、 `@ClassRule` の
 [[extensions-registration]]
 === 拡張の登録
 
-拡張は、 <<extensions-registration-declarative,`@ExtendWith`>> を通して_宣言的に_  、
+拡張は、 <<extensions-registration-declarative,`@ExtendWith`>> を通して _宣言的に_  、
 または <<extensions-registration-programmatic,`@RegisterExtension`>> を通して _プログラム的に_ 、
 もしくはJavaの  <<extensions-registration-automatic,`ServiceLoader`>> 機構を通して _自動的に_ 登録されます。
 
@@ -240,18 +240,19 @@ _設定パラメータ_ として、もしくはJUnit Platform設定ファイル
 （詳細は <<running-tests-config-params, 設定パラメータ>> をご覧ください）を
 通して供給することができます。
 
-例えば、JUnitの `@Disabled` 条件を無効化するには、次のシステムプロパティでJVMを起動します。
+例えば、JUnitの `@Disabled` 条件を無効化するには、
+次のシステムプロパティでJVMを起動します。
 
 `-Djunit.jupiter.conditions.deactivate=org.junit.*DisabledCondition`
 
 [[extensions-conditions-deactivation-patterns]]
 ===== パターンマッチングの構文
 
-`junit.jupiter.conditions.deactivate` パターンが、アスタリスク（ `*` ）のみで
+`junit.jupiter.conditions.deactivate` パターンが、アスタリスク（ `+*+` ）のみで
 構成されている場合、全ての条件が無効化されます。そうでない場合、パターンは、
-各登録された条件の完全修飾クラス名（ *FQCN* ）とマッチしているかの判断に使われます。
+各登録された条件の完全修飾クラス名（ _FQCN_ ）とマッチしているかの判断に使われます。
 パターン内の全てのドット（ `.` ）は、FQCN内のドット（ `.` ）またはドル（ `$` ）と
-マッチします。全てのアスタリスク（ `*` ）は、FQCN内の1つ以上の文字とマッチします。
+マッチします。全てのアスタリスク（ `+*+` ）は、FQCN内の1つ以上の文字とマッチします。
 パターン内の他の全ての文字は、FQCNと1対1でマッチします。
 
 例：
@@ -576,7 +577,7 @@ NOTE: 拡張コンテキストのストアは、その拡張コンテキスト�
 :figure-caption: User code and extension code
 
 [#extensions-execution-order-diagram,reftext='{figure-caption}']
-image::extensions_lifecycle.png[caption='',title='{figure-caption}', link=https://junit.org/junit5/docs/5.2.0/user-guide/images/extensions_lifecycle.png]
+image::https://junit.org/junit5/docs/5.2.0/user-guide/images/extensions_lifecycle.png[caption='',title='{figure-caption}', link=]
 
 ユーザ提供のテストとライフサイクルに関するメソッドはオレンジで示され、
 拡張によって提供されるコールバックは青で示されています。

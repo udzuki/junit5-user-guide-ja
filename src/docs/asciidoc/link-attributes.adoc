@@ -1,7 +1,9 @@
-:docs-version:                           5.3.0
+:docs-version:                           5.2.0
 :platform-version:                       1.2.0
-:jupiter-version:                        5.3.0
-:vintage-version:                        5.3.0
+:jupiter-version:                        5.2.0
+:vintage-version:                        5.2.0
+:bom-version:                            5.2.0
+:ota4j-version:                          5.2.0
 :junit4-version:                         4.12
 :javadoc-root:                           https://junit.org/junit5/docs/{docs-version}/api
 //
