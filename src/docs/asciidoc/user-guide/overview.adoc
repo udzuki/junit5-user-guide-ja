@@ -6,39 +6,51 @@
 
 ifdef::backend-html5[このドキュメントは link:https://junit.org/junit5/docs/5.2.0/user-guide/index.pdf[PDF] でも利用可能です。]
 
+
 [TIP]
 .Translations
 ====
-このドキュメントは http://sjyuan.cc/junit5/user-guide-cn/[簡体字中国語] でも利用可能です。
+このドキュメントは http://sjyuan.cc/junit5/user-guide-cn/[簡体字中国語] と
+https://udzuki.jp/public/junit5-user-guide-ja[日本語] でも利用可能です。
 ====
 
 [[overview-what-is-junit-5]]
 === JUnit 5とは？
 
-これまでのバージョンのJUnitとは異なり、JUnit 5は3つのサブプロジェクトで
-開発されている様々なモジュールから構成されています。
+これまでのバージョンのJUnitとは異なり、JUnit 5は3つの異なるサブプロジェクトからなる
+様々なモジュールで構成されています。
 
 **_JUnit 5 = JUnit Platform + JUnit Jupiter + JUnit Vintage_**
 
-*JUnit Platform* は、JVM上で <<launcher-api,テスティングフレームワークを起動させる>> ための基礎としての機能を果たします。
-また、プラットフォーム上で動作するテスティングフレームワークを開発するための `{TestEngine}` APIを定義しています。
-さらに、プラットフォーム上であらゆる `TestEngine` を実行するために、 <<running-tests-junit-platform-runner,JUnit 4ベースのRuunner>> と同様に、
-コマンドラインからプラットフォームを立ち上たり、 <<running-tests-build-gradle,Gradle>> や
-<<running-tests-build-maven,Maven>> 向けプラグインを構築するための<<running-tests-console-launcher,コンソールラウンチャー>>を提供します。
+**JUnit Platform** は、JVM上で <<launcher-api,テスティングフレームワークを起動させる>>
+ための基礎としての機能を果たします。
+また、プラットフォーム上で動作するテスティングフレームワークを開発するための
+`{TestEngine}` APIを定義しています。
+さらに、コマンドラインからプラットフォームを立ち上たり、
+<<running-tests-build-gradle,Gradle>> と　<<running-tests-build-maven,Maven>>
+のためのプラグインを構築するために
+<<running-tests-console-launcher,コンソールラウンチャー>>を提供します。
+また、プラットフォーム上であらゆる `TestEngine` を実行するために、
+<<running-tests-junit-platform-runner,JUnit 4ベースのRuunner>> も提供します。
 
-*JUnit Jupiter* は、JUnit 5でテストを書いたり拡張するための
-新しい <<writing-tests,プログラミングモデル>> と <<extensions,拡張モデル>>の組み合わせです。
-Jupiterのサブプロジェクトは、プラットフォーム上でJupiterベースのテストを実行するための `TestEngine` を提供します。
+**JUnit Jupiter** は、JUnit 5でテストを書いたり、拡張するための、
+新しい <<writing-tests,プログラミングモデル>> と <<extensions,拡張モデル>>
+の組み合わせです。
+Jupiterのサブプロジェクトは、プラットフォーム上でJupiterベースのテストを
+実行するための `TestEngine` を提供します。
 
-*JUnit Vintage* は、プラットフォーム上でJUnit3とJUnit4ベースのテストを実行するための
+**JUnit Vintage** は、
+プラットフォーム上でJUnit3とJUnit4ベースのテストを実行するための
 `TestEngine` を提供します。
 
 [[overview-java-versions]]
 === サポートしているJavaのバージョン
 
-JUnit 5は実行時にJava 8(またはそれ以上)を必要とします。しかしながら、それよりも前のバージョンのJDKでコンパイルされたコードもテスト可能です。
+JUnit 5は実行時にJava 8(またはそれ以上)を必要とします。
+しかしながら、以前のバージョンのJDKでコンパイルされたコードもテスト可能です。
 
 [[overview-getting-help]]
 === ヘルプ
 
-JUnit 5に関連した質問は {StackOverflow} に投稿するか、 {Gitter} でチャットしてください。
+JUnit 5に関連した質問は {StackOverflow} で尋ねるか、
+{Gitter} で私たちに話しかけてください。
