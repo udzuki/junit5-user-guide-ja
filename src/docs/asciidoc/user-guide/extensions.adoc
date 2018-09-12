@@ -1,3 +1,5 @@
+include::../link-attributes.adoc[]
+
 [[extensions]]
 == 拡張モデル
 
@@ -84,7 +86,7 @@ _プログラム的に_ 拡張を登録できます。
 _宣言的に_ 拡張を登録した場合、概してアノテーション通りにのみ設定できます。
 それに対して、 `@RegisterExtension` を通して拡張を登録した場合、
 _プログラム的に_ 拡張することができます。
-例えば、拡張のコンストラクタや静的なファクトリメソッド、ビルダーAPIに
+-- 例えば、拡張のコンストラクタや静的なファクトリメソッド、ビルダーAPIに
 引数を渡すために使うことができます。
 
 NOTE: `@RegisterExtension` フィールドは、 `private` や `null`（評価時）であってはなりませんが、
@@ -103,7 +105,7 @@ NOTE: `@RegisterExtension` フィールドは、 `private` や `null`（評価�
 次の例では、テストクラスの `server` フィールドが、 `WebServerExtension` によって
 サポートされているビルダーパターンを用いてプログラム的に初期化されます。
 設定された `WebServerExtension` は、クラスレベルの拡張として自動的に登録されます。
-例えば、クラスの全てのテストの実行前にサーバを起動し、実行完了後にサーバを停止するためです。
+-- 例えば、クラスの全てのテストの実行前にサーバを起動し、実行完了後にサーバを停止するためです。
 さらに、 `@BeforeEach` や `@AfterEach` 、 `@Test` メソッドだけでなく、
 `@BeforeAll` や `@AfterAll` が付与された静的なライフサイクルメソッドは、
 必要であれば、 `server` フィールドを通して拡張のインスタンスにアクセスできます。
@@ -123,6 +125,42 @@ class WebServerDemo {
         String serverUrl = server.getServerUrl();
         // Use WebClient to connect to web server using serverUrl and verify response
         assertEquals(200, webClient.get(serverUrl + "/products").getResponseStatus());
+    }
+}
+----
+
+[[extensions-registration-programmatic-static-fields-kotlin]]
+===== Kotlinにおける静的なフィールド
+プログラミング言語 Kotlin は `static` なフィールドという概念を持っていません。
+しかしながら、アノテーションを使うことで、コンパイラに静的なフィールドを生成するよう
+指示することができます。
+先ほど述べたように、 `@RegisterExtension` フィールドは `private` でも `null` でも
+あってはならないので、 Kotlinでは `private` フィールドを生成する `@JvmStatic` のような
+アノテーションを使うことが **できません** 。
+むしろ、 `@JvmField` を使わなければなりません。
+
+次の例は、前セクションにある `WebServiceDemo` のあるバージョンを Kotlin に
+移植したものです。
+
+[source,groovy,indent=0]
+.Kotilinにおいて静的なフィールドを通して登録された拡張
+----
+class KotlinWebServerDemo {
+
+    companion object {
+        @JvmField
+        @RegisterExtension
+        val server = WebServerExtension.builder()
+                .enableSecurity(false)
+                .build()
+    }
+
+    @Test
+    fun getProductList() {
+        // Use WebClient to connect to web server using serverUrl and verify response
+        val webClient = WebClient()
+        val serverUrl = server.serverUrl
+        assertEquals(200, webClient.get("$serverUrl/products").responseStatus)
     }
 }
 ----
@@ -262,6 +300,35 @@ _設定パラメータ_ として、もしくはJUnit Platform設定ファイル
 * `*.MycCondition`：クラス名が `MyCondition` のものを無効化します。
 * `*System*` ：クラス名に `System` を含むものを無効化します。
 * `org.example.MyCondition` ：FQCNが `org.example.MyCondition` のものを無効化します。
+
+[[extensions-test-instance-factories]]
+=== テストインスタンスファクトリー
+
+`{TestInstanceFactory}` は、テストクラスインスタンスを _生成_ したい
+`Extensions` のためのAPIを定義します。
+
+一般的なユースケースは、依存注入フレームワークからテストインスタンスを獲得したり、
+テストクラスインスタンスを生成するために static なファクトリーメソッドを呼び出すことが
+含まれます。
+
+もし `TestInstanceFactory` が登録されていない場合、フレームワークは
+テストクラスをインスタンス化するために単純にコンストラクタ _単体_ を呼び出すでしょう。
+もしかすると、コンストラクタ引数は登録された `ParameterResolver` 拡張によって
+解決されるかもしれません。
+
+`TestInstanceFactory` を実装する拡張は、テストインターフェイス、
+またはトップレベル・テストクラス、もしくは `@Nested` テストクラスに登録できます。
+
+[WARNING]
+====
+1つのクラスに対して、 `TestInstanceFactory` を実装する拡張を複数登録することは、
+そのクラス、サブクラス、またはネストされたクラス内の全てのテストで例外が
+投げられる結果になるでしょう。
+スーパークラスや _同封する_ クラス（つまり、 `@Nested` テストクラスの場合）内で
+登録されたいかなる `TestInstanceFactory` は `継承` されます。
+ユーザは自身の責任の下で、特定のテストクラスに対して、
+1つだけの `TestInstanceFactory` を登録するよう保証しないといけません。
+====
 
 [[extensions-test-instance-post-processing]]
 === テストインスタンスの事後処理
