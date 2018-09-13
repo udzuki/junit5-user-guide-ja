@@ -118,10 +118,10 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_test[Gradle�
 を参照してください。
 
 [WARNING]
-._JUnit Platform Gradleプラグインは非推奨_
+.JUnit Platform Gradleプラグインは廃止
 ====
 JUnitチームによって開発された非常に初歩的な `junit-platform-gradle-plugin` は、
-JUnit Platform 1.2で非推奨になり、1.3では廃止されます。
+JUnit Platform 1.2で非推奨になり、1.3で廃止されました。
 Gradleの標準的な `test` タスクに移行してください。
 ====
 
@@ -210,65 +210,36 @@ https://www.slf4j.org/legacy.html#jul-to-slf4j[JULからSLF4Jへの橋渡し]を
 [[running-tests-build-maven]]
 ==== Maven
 
-JUnitチームは、 `mvn test` を通してJUnit 4とJUnit Jupiterのテストを実行できるような
-Maven Surefireのための基本的なプロバイダを開発しました。
-https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-starter-maven[junit5-jupiter-starter-maven]プロジェクト内の `pom.xml` ファイルは、開始ポイントとしてのプロバイダの利用方法を示しています。
+NOTE: JUnitチームによって独自に開発されていた、
+カスタム `junit-platform-surefire-provider` は非推奨となり、
+JUnit Platform 1.4で削除される予定です。
+代わりに、Maven Surefireのネイティブサポートを使用してください。
 
-NOTE:  `unit-platform-surefire-provider` を用いて Maven Surefire 2.21.0 を使ってください。
-
-[source,xml]
-----
-...
-<build>
-    <plugins>
-        ...
-        <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>{surefire-version}</version>
-            <dependencies>
-                <dependency>
-                    <groupId>org.junit.platform</groupId>
-                    <artifactId>junit-platform-surefire-provider</artifactId>
-                    <version>{platform-version}</version>
-                </dependency>
-            </dependencies>
-        </plugin>
-    </plugins>
-</build>
-...
-----
+https://issues.apache.org/jira/browse/SUREFIRE-1330[version 2.22.0]
+から、Maven SurefireはJUnit Platform上でテスト実行するための
+http://maven.apache.org/surefire/maven-surefire-plugin/examples/junit-platform.html[native support]
+を提供しています。
+`{junit5-jupiter-starter-maven}` プロジェクト内の `pom.xml` は
+使用方法を説明しており、あなたのMaven ビルドを設定する開始点として用いることができます。
 
 [[running-tests-build-maven-engines-configure]]
 ===== テストエンジンの設定
 
 Maven Surefireでテストを実行するには、
-`TestEngine` 実装を実行時クラスパスに加える必要があります。
+少なくとも1つの `TestEngine` 実装を実行時クラスパスに加える必要があります。
 
 JUnit Jupiterベースのテストへのサポートを設定するには、
-次のように、JUnit Jupiter API上に `test` の依存関係を設定し、
-`maven-surefire-plugin` の依存関係にJUnit Jupiter `TestEngine` 実装を追加してください。
+次のように、JUnit Jupiter APIとJUnit Jupiter `TestEngine` 実装上に
+`test` スコープの依存関係を設定してください。
 
 [source,xml]
+[subs=attributes+]
 ----
-...
 <build>
     <plugins>
-        ...
         <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>{surefire-version}</version>
-            <dependencies>
-                <dependency>
-                    <groupId>org.junit.platform</groupId>
-                    <artifactId>junit-platform-surefire-provider</artifactId>
-                    <version>{platform-version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.junit.jupiter</groupId>
-                    <artifactId>junit-jupiter-engine</artifactId>
-                    <version>{jupiter-version}</version>
-                </dependency>
-            </dependencies>
         </plugin>
     </plugins>
 </build>
@@ -281,36 +252,30 @@ JUnit Jupiterベースのテストへのサポートを設定するには、
         <version>{jupiter-version}</version>
         <scope>test</scope>
     </dependency>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>{jupiter-version}</version>
+        <scope>test</scope>
+    </dependency>
+    ...
 </dependencies>
 ...
 ----
 
-JUnit Platform Surefire Providerは、
-次のように、JUnit 4上に`test`の依存関係を設定し、 `maven-surefire-plugin` の依存関係に
-JUnit Vintage `TestEngine`実装を追加することで、JUnit 4ベースのテストを実行できます。
+次のようにJUnit 4とJUnit Vintage `TestEngine` 実装上に
+`test` スコープの依存関係を設定することで、
+Maven SurefireはJUnit 4ベースのテストをJupiter　テストと一緒に実行できます。
 
 [source,xml]
+[subs=attributes+]
 ----
 ...
 <build>
     <plugins>
-        ...
         <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>2.21.0</version>
-            <dependencies>
-                <dependency>
-                    <groupId>org.junit.platform</groupId>
-                    <artifactId>junit-platform-surefire-provider</artifactId>
-                    <version>{platform-version}</version>
-                </dependency>
-                ...
-                <dependency>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                    <version>{vintage-version}</version>
-                </dependency>
-            </dependencies>
         </plugin>
     </plugins>
 </build>
@@ -323,19 +288,16 @@ JUnit Vintage `TestEngine`実装を追加することで、JUnit 4ベースの�
         <version>{junit4-version}</version>
         <scope>test</scope>
     </dependency>
+    <dependency>
+        <groupId>org.junit.vintage</groupId>
+        <artifactId>junit-vintage-engine</artifactId>
+        <version>{vintage-version}</version>
+        <scope>test</scope>
+    </dependency>
+    ...
 </dependencies>
 ...
 ----
-
-[[running-tests-build-maven-execute-single-test-class]]
-==== 単一のテストクラスを実行
-
-JUnit Platrform Surefire Providerは、Maven Surefire Pluginによってサポートされている
-`test` JVMシステムプロパティをサポートしています。
-例えば、 `org.example.MyTest` 内のテストメソッドだけを実行するには、
-コマンドラインから `mvn -Dtest=org.example.MyTest test` を実行してください。
-さらなる詳細については、
-https://maven.apache.org/surefire/maven-surefire-plugin/examples/single-test.html[Mavne Surefire Plugin]のドキュメントを参照してください。
 
 [[running-tests-build-maven-filter-test-class-names]]
 ==== テストクラス名によるフィルタリング
@@ -343,18 +305,20 @@ https://maven.apache.org/surefire/maven-surefire-plugin/examples/single-test.htm
 Maven Surefire Pluginは次のパターンにマッチする完全修飾名を持つテストクラスを
 スキャンします。
 
-* `**/Test*.java`
-* `**/*Test.java`
-* `**/*Tests.java`
-* `**/*TestCase.java`
+- `+**/Test*.java+`
+- `+**/*Test.java+`
+- `+**/*Tests.java+`
+- `+**/*TestCase.java+`
 
 さらに、全てのネストされたクラス（静的なメンバークラスも含む）はデフォルトでは除外されます。
 
 しかしながら、このデフォルトの振る舞いは、 `include` と `exclude` の規則を
 `pom.xml` 明示的に設定にすることで、上書きできます。
-例えば、Maven Surefireに静的なメンバークラスを除外させないためには、除外規則を上書きします。
+例えば、Maven Surefireに静的なメンバークラスを除外させないためには、
+次のように除外規則を上書きします。
 
 [source,xml]
+[subs=attributes+]
 ._Maven Surefireの除外規則の上書き_
 ----
  ...
@@ -384,27 +348,22 @@ https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclu
 次の設定プロパティを用いることで、タグまたは <<running-tests-tag-expressions, タグ表現>> によって
 テストをフィルターすることができます。
 
-- _タグ_ または _タグ表現_ を算入するには、 `groups` または `includeTags` を使ってください。
-- _タグ_ または _タグ表現_ を除外するには、 `excludedGroups` または `excludeTags` を使ってください。
+- _タグ_ または _タグ表現_ を算入するには、 `groups` を使ってください。
+- _タグ_ または _タグ表現_ を除外するには、 `excludedGroups` を使ってください。
 
 [source,xml]
+[subs=attributes+]
 ----
 ...
 <build>
     <plugins>
-        ...
         <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>2.21.0</version>
             <configuration>
-                <properties>
-                    <includeTags>acceptance | !feature-a</includeTags>
-                    <excludeTags>integration, regression</excludeTags>
-                </properties>
+                <groups>acceptance | !feature-a</groups>
+                <excludeGroups>integration, regression</excludeGroups>
             </configuration>
-            <dependencies>
-                ...
-            </dependencies>
         </plugin>
     </plugins>
 </build>
@@ -420,6 +379,7 @@ https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclu
 テスト探索と実行に影響を与えるJUnit Platform <<running-tests-config-params, 設定パラメータ>> をセットすることができます。
 
 [source,xml]
+[subs=attributes+]
 ----
 ...
 <build>
@@ -427,7 +387,7 @@ https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclu
         ...
         <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.21.0</version>
+            <version>{surefire-version}</version>
             <configuration>
                 <properties>
                     <configurationParameters>
@@ -437,9 +397,6 @@ https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclu
                     </configurationParameters>
                 </properties>
             </configuration>
-            <dependencies>
-                ...
-            </dependencies>
         </plugin>
     </plugins>
 </build>
@@ -526,7 +483,7 @@ https://ant.apache.org/manual/Tasks/junitlauncher.html[`junitlauncher`タスク]
 [[running-tests-console-launcher]]
 === コンソールラウンチャー
 
-`{ConsoleLauncher}` はコマンドラインJavaアプリケーションで、
+`{ConsoleLauncher}` はコマンドラインによるJavaアプリケーションで、
 JUnit Platformをコンソールから起動できます。
 例えば、JUnit VintageとJUnit Jupiterテストを実行し、
 テストの実行結果をコンソールに出力します。
@@ -571,7 +528,10 @@ Test run finished after 64 ms
 
 .終了コード
 NOTE: `{ConsoleLauncher}` は、いずれかのコンテナまたはテストが失敗した場合は
-ステータスコード `1` 、そうでない場合はステータスコード `0` を返します。
+ステータスコード `1` で終了します。
+もしテストが1つも発見されず、 `--fail-if-no-tests` コマンドライン・オプションが
+供給された時はステータスコード `2` で終了します。
+そのどれでもない場合、ステータスコードは `0` となります。
 
 [[running-tests-console-launcher-options]]
 ==== オプション
@@ -649,6 +609,33 @@ NOTE: `{ConsoleLauncher}` は、いずれかのコンテナまたはテストが
 --config <key=value>                           テスト発見・実行のための設定パラメータをセットします。
                                                  このオプションは繰り返し可能です。
 ----
+
+[[running-tests-console-launcher-argument-files]]
+==== 引数ファイル (@-files)
+いくつかのプラットフォーム上では、多くのオプションや長すぎる引数でコマンドラインを
+生成する際、コマンドラインの長さに対するシステム制限に遭遇するかもしれません。
+
+バージョン1.3以降では、 `ConsoleLauncher` は _引数ファイル_ （、
+または _@-files_ としても知られています）をサポートするようになります。
+引数ファイルはコマンドに渡される引数を自身に含むファイルです。
+基礎となる https://github.com/remkop/picocli[picocli]
+コマンドライン・パーサーが 文字 `@` で始まる引数に遭遇した時、
+そのファイルの中身を引数リストに拡張します。
+
+ファイル内の引数は、スペース、または改行によって分割できます。
+もし引数が組み込み空白文字を含む時、引数全体はダブル、もしくはシングルクォテーションで
+包むべきです -- 例えば、 `"-f=My Files/Stuff.java"` のようにです。
+
+もし引数ファイルが存在しない、もしくは読み込み不可の場合、引数は文字通り扱われ、削除されません。
+これは恐らく"マッチしない引数"エラーメッセージという結果になるでしょう。
+そのようなエラーに対しては、システム・プロパティを `DEBUG` に設定した
+`picocli.trace` コマンドを実行することでトラブルシューティングができます。
+
+複数の _@-files_ はコマンドライン上で特定できます。
+特定するパスは、現在のディレクトリからの相対パスか、絶対パスです。
+
+最初に `@` のついたパラメータを渡すには、さらに `@` シンボルを追加することでエスケープできます。
+例えば、 `@@somearg` は `@somearg` となり、拡張の対象となりません。
 
 [[running-tests-junit-platform-runner]]
 === JUnit 4を用いてJUnit Platformを実行
@@ -790,8 +777,8 @@ JUnit Platform上で実行しているテストエンジンに供給されます
     JUnit Platformによって提供されているツールの内の1つを通してテスト実行している場合、
     次のように、設定パラメータを指定できます。
 * <<running-tests-console-launcher,コンソール・ラウンチャー>> ： `--config` コマンドラインオプションを利用。
-* <<running-tests-build-gradle-config-params,Gradle plugin>> ：
-    `configurationParameter` または `configurationParameters` のDSLを利用。
+* <<running-tests-build-gradle-config-params,Gradle>> ：
+    `systemProperty` または `systemProperties` のDSLを利用。
 * <<running-tests-build-maven-config-params,Maven Surefire provider>> ：
     `configurationParameters` プロパティを利用。
 . JVMシステムプロパティ。
@@ -828,8 +815,33 @@ NOTE: 設定パラメータは上で定義された順序で探索されます�
 
 |foo | *foo* の全てのテスト
 |bar \| baz | *bar* の全てのテストに加えて *baz* の全てのテスト
-|bar & baz | *bar* と *baz* 相互に関わる全てのテスト
+|bar & baz | *bar* と *baz* の積集合となる全てのテスト
 |foo & !end-to-end | *foo* のうち、 *end-to-end* でない全てのテスト
 |(micro \| integration) & (foo \| baz) | *foo* または *baz* のうち、 *micro* または *integration* の全てのテスト
 |===
 
+[[running-tests-capturing-output]]
+=== 標準出力 / エラーの捕捉
+
+バージョン1.3以降、JUnit Platformは `System.out` と `System.err` に
+プリントされる出力を捕捉するためのオプトイン・サポートを提供しています。
+有効化するには、単純に `junit.platform.output.capture.stdout` と/もしくは
+`junit.platform.output.capture.stderr` の <<running-tests-config-params, configuration parameter>>
+に対して、 `true` を設定するだけです。
+さらに、 `junit.platform.output.capture.maxBuffer` を用いて、
+実行されるテスト、もしくはコンテナごとに使われるバッファーの最大バイト数を設定できます。
+
+もし有効化している場合、JUnit Platformは対応する出力を捕捉し、
+それを `stdout` 、もしくは `stderr` キーを用いるレポートエントリとして、
+全ての登録された `{TestExecutionListener}` に対して、
+テスト、もしくはコンテナが終了したとレポートされる前に、即座に発行されます。
+
+捕捉された出力は、テスト、もしくはコンテナを実行するのに使われたスレッドから
+発行されたもののみを含むことに注意してください。
+他のスレッドによる出力はいずれも省かれます。
+なぜなら、特に <<writing-tests-parallel-execution, テストを並行実行する>> 時には、
+出力を特定のテストかスレッドと結びつけることは不可能であろうからです。
+
+WARNING: 出力の捕捉は現在 _実験的な_　機能です。これを試して、フィードバックを
+JUnit チームに提供することで、彼らはこの機能を改善し、
+結果的に <<api-evolution, 昇格>> させることができます。
