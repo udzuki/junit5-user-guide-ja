@@ -1,5 +1,3 @@
-include::../link-attributes.adoc[]
-
 [[extensions]]
 == 拡張モデル
 
