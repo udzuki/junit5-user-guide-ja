@@ -2,7 +2,7 @@
 == テストを書く
 
 [source,java,indent=0]
-.A first test case
+.最初のテストケース
 ----
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -47,11 +47,11 @@ JUnit Jupiterは、テストの設定やフレームワークの拡張のため�
 | `@ExtendWith` | カスタム <<extensions,拡張>> を登録できます。アノテーションは _継承_ されます。
 |===
 
-次のアノテーションをつけたメソッドは値を返してはいけません。
+次のアノテーションが付与されたメソッドは値を返してはいけません。
 ( `@Test` , `@TestTemplate` , `@RepeatedTest` , `@BeforeAll` , `@AfterAll` , `@BeforeEach` , `@AfterEach` )
 
 
-[NOTE]
+[WARNING]
 ====
 いくつかのアノテーションは現在 _実験段階_ である恐れがあります。
 詳細に関しては、 <<api-evolution-experimental-apis, 実験的なAPIs>> をご覧ください。
@@ -1434,7 +1434,7 @@ class RepeatedTestsDemo {
 }
 ----
 
-`ConsoleLauncher` またはunicodeテーマを有効化した `junitPlatformTest` Gradleプラグインを
+unicodeテーマを有効化した `ConsoleLauncher` を
 使うと、 `RepeatedTestsDemo` の実行結果は次のようなコンソール出力を行います。
 
 [source]
@@ -1511,7 +1511,7 @@ WARNING: パラメータ化テストは、現在 _実験的な_ 機能です。
 依存関係に加える必要があります。詳細については、 <<dependency-metadata, 依存関係のメタデータ>> をご覧ください。
 
 [[writing-tests-parameterized-tests-consuming-arguments]]
-=== 引数の消費
+==== 引数の消費
 
 パラメータ化テストメソッドは典型的に、設定されたソース
 （  <<writing-tests-parameterized-tests-sources, 引数のソース>> をご覧ください。）
@@ -1545,7 +1545,7 @@ _ArgumentsAccessor_ 型または _@AggregateWith_ の付与されたパラメー
 
 `@ValueSource` は最も単純なソースの1つです。
 リテラル値の配列を1つ設定することができ、パラメータ化テスト呼び出しにつき、
-1つのパラメータを提供できます。
+1つの引数を提供できます。
 
 次のリテラル値の型が `@ValueSource` にサポートされています。
 
@@ -1625,13 +1625,27 @@ void testWithEnumSourceRegex(TimeUnit timeUnit) {
 [[writing-tests-parameterized-tests-sources-MethodSource]]
 ===== `@MethodSource`
 
-`@MethodSource` では、テストクラスまたは外部クラスの _ファクトリー_ メソッドを
-1つ以上使うことができます。ファクトリーメソッドは、 `Stream` または `Iterable` 、
-`Iterator` 、引数の配列を返す必要があります。さらに、ファクトリーメソッドには
-引数を与えられません。テストクラス内のファクトリーメソッドは、テストクラスに
+`{MethodSource}` では、テストクラス、もしくは外部クラスの _ファクトリー_ メソッドを
+1つ以上使うことができます。
+
+テストクラス内のファクトリーメソッドは、テストクラスに
 `@TestInstance(Lifecycle.PER_CLASS)` が付与されていない限り、
 `static` である必要があります。一方、外部クラスのファクトリーメソッドは
 常に `static` である必要があります。
+さらに、そのようなファクトリーメソッドは引数を受け入れてはいけません。
+
+各ファクトリーメソッドは _引数_ の _ストリーム_ を生成する必要があり、
+ストリーム内の各引数の組は、 `@ParameterizedTest` が付与されたメソッドの
+ここの呼び出しに対して物理的な引数として供給されます。
+一般的に言って、これは `Arguments` の `Stream` （つまり、 `Stream<Arguments>` ）
+と解釈されます；しかしながら、実際の具体的な返り値の型は多くの形態を取ることができます。
+この文脈において、"ストリーム"というのは、 JUnit が確実に `Stream` に
+変換できる全てのものを意味します。
+`Stream` とは、`Stream`　や `DoubleStream`　、 `LongStream`　、 `IntStream` 、
+`Collection` 、 `Iterator` 、 `Iterable` 、 オブジェクトの配列、
+プリミティブの配列といったものです。
+ストリーム中の"引数"は、 `Arguments` のインスタンス、もしくはオブジェクトの配列（すなわち、 `Object[]` ）、
+またはパラメータ化テストメソッドは1つの引数を受け入れているときは1つの値として供給されます。
 
 パラメータが1つだけ必要な場合は、次の例が示しているように、パラメータの型のインスタンスの`Stream`を返すことができます。
 
@@ -1681,10 +1695,15 @@ static IntStream range() {
 }
 ----
 
-テストメソッドが複数のパラメータを宣言している場合、
-下に示すように `Arguments` インスタンスのコレクションまたはストリームを
-返す必要があります。 `Arguments.of(Object...)` は、
-`Arguments` インターフェイスで定義されている静的なファクトリーメソッドです。
+もしパラメータ化テストメソッドが複数のパラメータを宣言している場合、
+下に示すように `Arguments` インスタンスのコレクションかストリーム、
+もしくはその配列、またはオブジェクトの配列を返す必要があります。
+（サポートされている返り値の型に関する詳細については、
+`{MethodSource}` のJavaDocをご覧ください。）
+`arguments.of(Object...)` は、`Arguments` インターフェイスで定義されている
+静的なファクトリーメソッドであることに注意してください。
+また、 `Arguments.of(Object...)` は `arguments(Object...)` の
+代わりとして使うことができます。
 
 [source,java]
 ----
@@ -1866,8 +1885,11 @@ void testWithImplicitArgumentConversion(TimeUnit argument) {
 |`long`/`Long` |`&quot;1&quot;` → `1L`
 |`float`/`Float` |`&quot;1&quot;` → `1.0f`
 |`double`/`Double` |`&quot;1&quot;` → `1.0d`
-|`Enum`サブクラス |`&quot;SECONDS&quot;` → `TimeUnit.SECONDS`
+|`Enum` サブクラス |`&quot;SECONDS&quot;` → `TimeUnit.SECONDS`
 |`java.io.File` |`&quot;/path/to/file&quot;` → `new File(&quot;path/to/file&quot;)`
+|`java.lang.Class` |`"java.lang.Integer"`  → `java.lang.Integer.class` _(ネストクラスには `$` を使います。例. `"java.lang.Thread$State"`)_
+|`java.lang.Class` |`"byte"`  → `byte.class` _(プリミティブクラスもサポートされています。)_
+|`java.lang.Class` |`"char[]"`  → `char[].class` _(配列型もサポートされています。)_
 |`java.math.BigDecimal` |`&quot;123.456e789&quot;` → `new BigDecimal(&quot;123.456e789&quot;)`
 |`java.math.BigInteger` |`&quot;1234567890123456789&quot;` → `new BigInteger(&quot;1234567890123456789&quot;)`
 |`java.net.URI` |`&quot;http://junit.org/&quot;` → `URI.create(&quot;http://junit.org/&quot;)`
@@ -2178,13 +2200,13 @@ JUnit Jupiterでは導入されました。
 `@Test` メソッドとは対照的に、 `@TestFactory` メソッド自身はテストケースではなく、
 むしろテストケースのためのファクトリーです。
 そのため、動的テストはファクトリーの産出物となります。
-技術的なことを言うと、 `@TestFactory` メソッドは、 `DynamicNode` インスタンスの
-`Stream` または `Collection` 、 `Iterable` 、 `Iterator` を返さなければなりません。
+技術的に言うと、 `@TestFactory` メソッドは、 `DynamicNode` インスタンスの
+`Stream` か `Collection` 、 `Iterable` 、 `Iterator` 、もしくは配列を返さなければなりません。
 `DynamicNode` のインスタンス化可能なサブクラスは `DynamicContainer` と `DynamicTest` です。
 `DynamicContainer` インスタンスは、 _表示名_ と動的な子ノードのリストで構成されており、
 動的なノードの任意なネスト階層を生成できます。
-`DynamicTest` インスタンスは、遅延実行され、テストケースの動的で非決定的な生成が
-可能となります。
+`DynamicTest` インスタンスは遅延実行され、
+テストケースの動的で非決定的な生成を可能とします。
 
 `@TestFactory` によって返される `Stream` はいずれも、 `stream.close()` を
 呼ぶことで適切に閉じられます。これによって、 `Files.lines()` のような資源を
@@ -2355,3 +2377,128 @@ class DynamicTestsDemo {
 
 }
 ----
+
+[[writing-tests-parallel-execution]]
+=== 並列実行
+
+デフォルトでは、JUnit Jupiterのテストは1つのスレッド内で逐次的に実行されます。
+例えばテスト実行を速める目的などの、並列テスト実行はバージョン5.3からオプトインの機能として利用可能です。
+並列実行を有効化するには、単純に、例えば `junit-platform.properties` 内の
+`junit.jupiter.execution.parallel.enabled` 設定パラメータを `true` にしてください。
+（他のオプションについては、 <<running-tests-config-params>> をご覧ください。）
+
+一度有効化すると、JUnit Jupiter エンジンはテストツリーの全ての階層状のテストを、
+宣言的な <<writing-tests-parallel-execution-synchronization, 同期化>> メカニズムを観察しながら、
+供給された <<writing-tests-parallel-execution-config, 設定>> に沿って並列実行します。
+<<running-tests-capturing-output, 出力の捕捉>> 機能は個別に有効かする必要があることに注意してください。
+
+WARNING: 並列テスト実行は現在 _実験的な_ 機能です。これを試して、フィードバックを
+JUnit チームに提供することで、彼らはこの機能を改善し、
+結果的に <<api-evolution, 昇格>> させることができます。
+
+[[writing-tests-parallel-execution-config]]
+==== 設定
+
+望ましい並列度と最大プールサイズのような特性は `{ParallelExecutionConfigurationStrategy}` を
+用いて設定することが可能です。
+JUnit Platformは常識にとらわれない2つの実装を提供します：
+`動的(dynamic)` と `固定(fixed)` です。
+あるいは、 `カスタム` 戦略を実装することもできます。
+
+戦略を選択するには、 `junit.jupiter.execution.parallel.config.strategy` 設定パラメータを
+次の選択肢の中の1つに設定するだけです：
+
+`dynamic（動的）` ::
+利用可能なプロセッサ、もしくはコアの数に
+`junit.jupiter.execution.parallel.config.dynamic.factor` 設定パラメータ（デフォルトでは `1` ）
+を掛け合わせた値を基に、望ましい並行度を算出します。
+
+`fixed（固定）` ::
+必須の `junit.jupiter.execution.parallel.config.fixed.parallelism` 設定パラメータを
+望ましい並行度として使います。
+
+`custom（カスタム）` ::
+望ましい並行度を決定するために、
+必須の `junit.jupiter.execution.parallel.config.custom.class` 設定パラメータを通して
+カスタム `{ParallelExecutionConfigurationStrategy}` 実装を特定することができます。
+
+もし設定戦略が設定されていない場合、JUnit Jupiterは乗数を1として `動的` 設定戦略を使用します。
+すなわち、望ましい並行度は利用可能なプロセッサ、もしくはコアの数と等しくなります。
+
+[[writing-tests-parallel-execution-synchronization]]
+==== 同期化
+
+`org.junit.jupiter.api.parallel` パッケージ内で、JUnit Jupiterは、
+実行モードを変更したり、異なるテスト間で共有資源を使う際に同期化を織り込むための
+2つのアノテーション・ベースとなる宣言的なメカニズムを提供しています。
+
+もし並列実行は有効化されている場合、全てのクラスとメソッドは
+デフォルトでは同時に（concurrently）実行されます。
+`{Execution}` アノテーションを使うことで、アノテーションが
+付与された要素やそのサブ要素（もしあれば）に対する実行モードを変更することができます。
+次の2つのモードが利用可能です：
+
+`SAME_THREAD`::
+親と全く同じスレッドを使うことを強制します。例えばテストメソッドに対して使われた場合、
+テストメソッドは含まれるテストクラスの `@BeforeAll` 、もしくは `@AfterAll` と
+全く同じスレッドで実行されます。
+
+`CONCURRENT`::
+資源制約が同一のスレッドであることを強制しない限り、同時に実行されます。
+
+さらに、 `{ResourceLock}` アノテーションを使うことで、あるテストクラス、もしくはメソッドが、
+信頼できるテスト実行を保証するために、同期化されたアクセスを必要とする共有資源を使うことを
+宣言することができます。
+
+もし次の例にあるテストが並列に実行されると、実行結果は不安定（flaky）なものとなるでしょう。
+すなわち、時々パスして、他の時には失敗します。
+これは同じシステムプロパティを読み書きするのにつきものの競合状態によるものです。
+
+[source,java]
+----
+@Execution(CONCURRENT)
+class SharedResourcesDemo {
+
+    private Properties backup;
+
+    @BeforeEach
+    void backup() {
+        backup = new Properties();
+        backup.putAll(System.getProperties());
+    }
+
+    @AfterEach
+    void restore() {
+        System.setProperties(backup);
+    }
+
+    @Test
+    @ResourceLock(value = SYSTEM_PROPERTIES, mode = READ)
+    void customPropertyIsNotSetByDefault() {
+        assertNull(System.getProperty("my.prop"));
+    }
+
+    @Test
+    @ResourceLock(value = SYSTEM_PROPERTIES, mode = READ_WRITE)
+    void canSetCustomPropertyToFoo() {
+        System.setProperty("my.prop", "foo");
+        assertEquals("foo", System.getProperty("my.prop"));
+    }
+
+    @Test
+    @ResourceLock(value = SYSTEM_PROPERTIES, mode = READ_WRITE)
+    void canSetCustomPropertyToBar() {
+        System.setProperty("my.prop", "bar");
+        assertEquals("bar", System.getProperty("my.prop"));
+    }
+}
+----
+
+共有資源へのアクセスがこのアノテーションを使うことで宣言されている時、
+JUnit Jupiterエンジンはこの情報を使って、
+衝突するテストが並列に実行されていないことを保証します。
+
+
+使われる資源をユニークに特定することに加えて、アクセスモードも明示できます。
+ある資源に対して `読み込み` アクセス権限を要する2つのテストはそれぞれ並列に実行されますが、
+他に `読み込み・書き込み` アクセス権限を要するテストが実行されている間は実行されません。
