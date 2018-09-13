@@ -36,43 +36,75 @@ JUnit 4では、元は内側の構成物として加えられていた多くの�
 [[api-evolution-experimental-apis]]
 === 実験的なAPI
 
-次の表は、（ `@API(status = EXPERIMENTAL)` を通して） _実験的な_ ものとして
+次の表は、 `@API(status = EXPERIMENTAL)` を通して、 _実験的な_ ものとして
 現在のところ指定されているAPIを列挙しています。これらのAPIを使うときは注意してください。
 
 [cols="^,^,^"]
 |===
-|パッケージ名 |クラス名 |タイプ
+|パッケージ名 |タイプ名 |登場したバージョン
 
-|`org.junit.jupiter.api` |`AssertionsKt` |`クラス`
-|`org.junit.jupiter.api` |`DynamicContainer` |`クラス`
-|`org.junit.jupiter.api` |`DynamicNode` |`クラス`
-|`org.junit.jupiter.api` |`DynamicTest` |`クラス`
-|`org.junit.jupiter.api` |`TestFactory` |`アノテーション`
-|`org.junit.jupiter.api.condition` |`DisabledIf` |`アノテーション`
-|`org.junit.jupiter.api.condition` |`EabledIf` |`アノテーション`
-|`org.junit.jupiter.api.extension` |`ScriptEvaluationException` |`クラス`
-|`org.junit.jupiter.params` |`ParameterizedTest` |`アノテーション`
-|`org.junit.jupiter.params.aggregator` |`AggregateWith` |`アノテーション`
-|`org.junit.jupiter.params.aggregator` |`ArgumentAccessException` |`クラス`
-|`org.junit.jupiter.params.aggregator` |`ArgumentsAccessor` |`インターフェイス`
-|`org.junit.jupiter.params.aggregator` |`ArgumentsAggregationException` |`クラス`
-|`org.junit.jupiter.params.aggregator` |`ArgumentsAggregator` |`インターフェイス`
-|`org.junit.jupiter.params.converter` |`ArgumentConversionException` |`クラス`
-|`org.junit.jupiter.params.converter` |`ArgumentConverter` |`インターフェイス`
-|`org.junit.jupiter.params.converter` |`ConvertWith` |`アノテーション`
-|`org.junit.jupiter.params.converter` |`JavaTimeConversionPattern` |`アノテーション`
-|`org.junit.jupiter.params.converter` |`SimpleArgumentConverter` |`クラス`
-|`org.junit.jupiter.params.provider` |`Arguments` |`インターフェイス`
-|`org.junit.jupiter.params.provider` |`ArgumentsProvider` |`インターフェイス`
-|`org.junit.jupiter.params.provider` |`ArgumentsSource` |`アノテーション`
-|`org.junit.jupiter.params.provider` |`ArgumentsSources` |`アノテーション`
-|`org.junit.jupiter.params.provider` |`CsvFileSource` |`アノテーション`
-|`org.junit.jupiter.params.provider` |`CsvSource` |`アノテーション`
-|`org.junit.jupiter.params.provider` |`EnumSource` |`アノテーション`
-|`org.junit.jupiter.params.provider` |`MethodSource` |`アノテーション`
-|`org.junit.jupiter.params.provider` |`ValueSource` |`アノテーション`
-|`org.junit.jupiter.params.support` |`AnnotationConsumer` |`インターフェイス`
-|`org.junit.platform.engine.discovery` |`ModuleSelector` |`クラス`
+|`org.junit.jupiter.api` |`AssertionsKt` ( _class_) | `5.1`
+|`org.junit.jupiter.api.condition` |`DisabledIf` _(annotation)_ | `5.1`
+|`org.junit.jupiter.api.condition` |`EabledIf` _(annotation)_ | `5.1`
+|`org.junit.jupiter.api.extension` |`ScriptEvaluationException` _(class)_ | `5.1`
+|`org.junit.jupiter.api.extension` |`TestInstanceFactory` _(interface)_ | `5.3`
+|`org.junit.jupiter.api.extension` |`TestInstanceFactoryContext` _(interface)_ | `5.3`
+|`org.junit.jupiter.api.extension` |`TestInstanceFactoryException` _(class)_ | `5.3`
+|`org.junit.jupiter.api.parallel` |`Execution` _(annotation)_ | `5.3`
+|`org.junit.jupiter.api.parallel` |`ExecutionMode` _(enum)_ | `5.3`
+|`org.junit.jupiter.api.parallel` |`ResourceAccessMode` _(enum)_ | `5.3`
+|`org.junit.jupiter.api.parallel` |`ResourceLock` _(annotation)_ | `5.3`
+|`org.junit.jupiter.api.parallel` |`ResourceLocks` _(annotation)_ | `5.3`
+|`org.junit.jupiter.api.parallel` |`Resources` _(class)_ | `5.3`
+|`org.junit.jupiter.api.params` |`ParameterizedTest` _(annotation)_ | `5.0`
+|`org.junit.jupiter.params.aggregator` |`AggregateWith` _(annotation)_ |`5.2`
+|`org.junit.jupiter.params.aggregator` |`ArgumentAccessException` _(class)_ |`5.2`
+|`org.junit.jupiter.params.aggregator` |`ArgumentsAccessor` _(interface)_ |`5.2`
+|`org.junit.jupiter.params.aggregator` |`ArgumentsAggregationException` _(class)_ |`5.2`
+|`org.junit.jupiter.params.aggregator` |`ArgumentsAggregator` _(interface)_ |`5.2`
+|`org.junit.jupiter.params.converter` |`ArgumentConversionException` _(class)_ |`5.0`
+|`org.junit.jupiter.params.converter` |`ArgumentConverter` _(interface)_ |`5.0`
+|`org.junit.jupiter.params.converter` |`ConvertWith` _(annotation)_ |`5.0`
+|`org.junit.jupiter.params.converter` |`JavaTimeConversionPattern` _(annotation)_ |`5.0`
+|`org.junit.jupiter.params.converter` |`SimpleArgumentConverter` _(class)_ |`5.0`
+|`org.junit.jupiter.params.provider` |`Arguments` _(interface)_ |`5.0`
+|`org.junit.jupiter.params.provider` |`ArgumentsProvider` _(interface)_ |`5.0`
+|`org.junit.jupiter.params.provider` |`ArgumentsSource` _(annotation)_ |`5.0`
+|`org.junit.jupiter.params.provider` |`ArgumentsSources` _(annotation)_ |`5.0`
+|`org.junit.jupiter.params.provider` |`CsvFileSource` _(annotation)_ |`5.0`
+|`org.junit.jupiter.params.provider` |`CsvParsingException` _(class)_ |`5.3`
+|`org.junit.jupiter.params.provider` |`CsvSource` _(annotation)_ |`5.0`
+|`org.junit.jupiter.params.provider` |`EnumSource` _(annotation)_ |`5.0`
+|`org.junit.jupiter.params.provider` |`MethodSource` _(annotation)_ |`5.0`
+|`org.junit.jupiter.params.provider` |`ValueSource` _(annotation)_ |`5.0`
+|`org.junit.jupiter.params.support` |`AnnotationConsumer` _(interface)_ |`5.0`
+|`org.junit.platform.engine.support.config` |`PrefixedConfigurationParameters` _(class)_ |`1.3`
+|`org.junit.platform.engine.support.hierarchical` |`DefaultParallelExecutionConfigurationStrategy` _(enum)_ |`1.3`
+|`org.junit.platform.engine.support.hierarchical` |`ExclusiveResource` _(class)_ |`1.3`
+|`org.junit.platform.engine.support.hierarchical` |`ForkJoinPoolHierarchicalTestExecutorService` _(class)_ |`1.3`
+|`org.junit.platform.engine.support.hierarchical` |`HierarchicalTestExecutorService` _(interface)_ |`1.3`
+|`org.junit.platform.engine.support.hierarchical` |`ExecutionMode` _(enum)_ |`1.3`
+|`org.junit.platform.engine.support.hierarchical` |`ParallelExecutionConfiguration` _(interface)_ |`1.3`
+|`org.junit.platform.engine.support.hierarchical` |`ParallelExecutionConfigurationStrategy` _(interface)_ |`1.3`
+|`org.junit.platform.engine.support.hierarchical` |`ResourceLock` _(interface)_ |`1.3`
+|`org.junit.platform.engine.support.hierarchical` |`SameThreadHierarchicalTestExecutorService` _(class)_ |`1.3`
+|`org.junit.platform.launcher` |`LauncherConstants` _(class)_ |`1.3`
+|`org.junit.platform.launcher.core` |`LauncherConfig` _(interface)_ |`1.3`
+|===
+
+[[api-evolution-deprecated-apis]]
+=== 非推奨のAPIたち
+
+次の表は、 `@API(status = DEPRECATED)` を通して、 _非推奨_ と現在指定されている
+APIを示しています。可能な限り、非推奨なAPIを使うのは避けてください。というのも、
+そのようなAPIは来たるリリースで恐らく削除されます。
+
+[cols="^,^,^"]
+|===
+|パッケージ名 |タイプ名 |非推奨になったバージョン
+
+|`org.junit.platform.engine.support.hierarchical` |`SingleTestExecutor` _(class)_ |`1.2`
+|`org.junit.platform.surefire.provider` |`JUnitPlatformProvider` _(class)_ |`1.3`
 |===
 
 [[api-evolution-tooling]]
