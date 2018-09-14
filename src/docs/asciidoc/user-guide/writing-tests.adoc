@@ -24,7 +24,7 @@ class FirstJUnit5Tests {
 JUnit Jupiterは、テストの設定やフレームワークの拡張のために、
 次のアノテーションをサポートしています。
 
-全てのコアなアノテーションは、 `junit-jupiter-api` モジュール内の
+全てのコアとなるアノテーションは、 `junit-jupiter-api` モジュール内の
 `{api-package}` パッケージにあります。
 
 |===
@@ -32,15 +32,15 @@ JUnit Jupiterは、テストの設定やフレームワークの拡張のため�
 
 | `@Test` | テストメソッドであることを意味します。JUnit 4の `@Test` と異なり、このアノテーションはいかなる属性も宣言しません。これは、JUnit Jupiterにおけるテスト拡張が専用のアノテーションを元に作動するからです。メソッドは _オーバーライド_ されない限り、 _継承_ されます。
 | `@ParameterizedTest` | <<writing-tests-parameterized-tests, パラメータ化テスト>> であることを意味します。メソッドは _オーバーライド_ されない限り、 _継承_ されます。
-| `@RepeatedTest` | <<writing-tests-repeated-tests, 繰り返しテスト>> のテンプレートメソッドであることを意味します。メソッドは _オーバーライド_ されない限り、 _継承_ されます。
+| `@RepeatedTest` | <<writing-tests-repeated-tests, 繰り返しテスト>> のテストテンプレートメソッドであることを意味します。メソッドは _オーバーライド_ されない限り、 _継承_ されます。
 | `@TestFactory` | <<writing-tests-dynamic-tests, 動的テスト>> のファクトリーメソッドであることを意味します。メソッドは _オーバーライド_ されない限り、 _継承_ されます。
 | `@TestInstance` | アノテーションが付与されたテストクラスの <<writing-tests-test-instance-lifecycle, テストインスタンス・ライフサイクル>> を設定するために使用されます。アノテーションは _継承_ されます。
 | `@TestTemplate` | <<writing-tests-test-templates, テストケースのテンプレート>> メソッドであることを意味します。テンプレートは登録された <<extensions-test-templates, プロバイダ>> によって返される呼び出しコンテキストの数に応じて複数回呼び出されます。メソッドは _オーバーライド_ されない限り、 _継承_ されます。
 | `@DisplayName` | テストクラスもしくはテストメソッドのカスタム表示名を宣言します。アノテーションは _継承_ されません。
-| `@BeforeEach` | 現在のクラス内にある *各テスト* （ `@Test` , `@RepeatedTest` , `@ParameterizedTest` , `@TestFactory` ）が実行される _前_ （ _before_ ）に実行されるメソッドを意味します。JUnit 4の `@Before` と類似したものです。メソッドは _オーバーライド_ されない限り、 _継承_ されます。
-| `@AfterEach` | 現在のクラス内にある *各テスト* （ `@Test` , `@RepeatedTest` , `@ParameterizedTest` , `@TestFactory` ）が実行された _後_ （ _after_ ）に実行されるメソッドを意味します。JUnit 4の `@After` と類似したものです。メソッドは _オーバーライド_ されない限り、 _継承_ されます。
-| `@BeforeAll` | 現在のクラス内にある *全テスト* （ `@Test` , `@RepeatedTest` , `@ParameterizedTest` , `@TestFactory` ）が実行される _前_ （ _before_ ）に実行されるメソッドを意味します。JUnit 4の `@BeforeClass` と類似したものです。メソッドは _隠蔽_ または _オーバーライド_ されない限り、 _継承_ され、（"クラス毎の" <<writing-tests-test-instance-lifecycle, テストインスタンス・ライフサイクル>> を使わない限り） `static` でないといけません。
-| `@AfterAll` | 現在のクラス内にある *全テスト* （ `@Test` , `@RepeatedTest` , `@ParameterizedTest` , `@TestFactory` ）が実行された _後_ （ _after_ ）に実行されるメソッドを意味します。JUnit 4の `@AfterClass` と類似したものです。メソッドは _隠蔽_ または _オーバーライド_ されない限り、 _継承_ され、（"クラス毎の" <<writing-tests-test-instance-lifecycle, テストインスタンス・ライフサイクル>> を使わない限り） `static` でないといけません。
+| `@BeforeEach` | クラス内にある *各* `@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory` メソッドが実行される _前_ に実行されるメソッドを意味します。JUnit 4の `@Before` と類似したものです。メソッドは _オーバーライド_ されない限り、 _継承_ されます。
+| `@AfterEach` | クラス内にある *各* `@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory` メソッドが実行された _後_ に実行されるメソッドを意味します。JUnit 4の `@After` と類似したものです。メソッドは _オーバーライド_ されない限り、 _継承_ されます。
+| `@BeforeAll` | クラス内にある *全* `@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory` メソッドが実行される _前_ に実行されるメソッドを意味します。JUnit 4の `@BeforeClass` と類似したものです。メソッドは _隠蔽_ または _オーバーライド_ されない限り、 _継承_ され、（"クラス毎の" <<writing-tests-test-instance-lifecycle, テストインスタンス・ライフサイクル>> を使わない限り） `static` でないといけません。
+| `@AfterAll` | クラス内にある *全* `@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory` メソッドが実行された _後_ に実行されるメソッドを意味します。JUnit 4の `@AfterClass` と類似したものです。メソッドは _隠蔽_ または _オーバーライド_ されない限り、 _継承_ され、（"クラス毎の" <<writing-tests-test-instance-lifecycle, テストインスタンス・ライフサイクル>> を使わない限り） `static` でないといけません。
 | `@Nested` | ネストされた非staticなテストクラスであることを意味します。 `@BeforeAll` と `@AfterAll` メソッドは、"クラス毎の" <<writing-tests-test-instance-lifecycle, テストインスタンス・ライフサイクル>> を使わない限り、 `@Nested` テストクラスの中では直接使うことができません。メソッドは _継承_ されません。
 | `@Tag` |クラスもしくはメソッドレベルでテストをフィルタリングするための _タグ_ を宣言できます。TestNGのtest groupsもしくはJUnit 4のCategoriesと類似したものです。アノテーションはクラスレベルでは _継承_ されますが、メソッドレベルでは _継承_ されません。
 | `@Disabled` | テストクラスもしくはテストメソッドを _無効化_ できます。JUnit 4の `@Ignore` と類似したものです。アノテーションは _継承_ されません。
@@ -54,13 +54,13 @@ JUnit Jupiterは、テストの設定やフレームワークの拡張のため�
 [WARNING]
 ====
 いくつかのアノテーションは現在 _実験段階_ である恐れがあります。
-詳細に関しては、 <<api-evolution-experimental-apis, 実験的なAPIs>> をご覧ください。
+詳細に関しては、 <<api-evolution-experimental-apis, 実験的なAPI>> をご覧ください。
 ====
 
 [[writing-tests-meta-annotations]]
 ==== メタアノテーションと合成アノテーション
 
-JUnit Jupiterアノテーションはメタアノテーションとして使うことができます。
+JUnit Jupiterアノテーションは _メタアノテーション_ として使うことができます。
 つまり、メタアノテーションのセマンティックを自動で _継承_ する
 独自の _合成アノテーション_ を定義できます。
 
@@ -68,7 +68,7 @@ JUnit Jupiterアノテーションはメタアノテーションとして使う�
 コピー＆ペーストする代わりに、次のように `@Fast` というカスタム _合成アノテーション_ を作成できます。
 `@Fast` は `@Tag("fast")` の代替として利用できます。
 
-[source,java]
+[source,java,indent=0]
 ----
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
