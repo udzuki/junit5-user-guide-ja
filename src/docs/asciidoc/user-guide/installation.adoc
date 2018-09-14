@@ -4,7 +4,8 @@
 最終的なリリースやマイルストーンのためのアーティファクトは、
 Maven Centralにデプロイされます。
 
-スナップショット版はSonatypeの {snapshot-repo}[スナップショットレポジトリ] の {snapshot-repo}/org/junit/[/org/junit] 以下にデプロイされます。
+スナップショット版はSonatypeの {snapshot-repo}[スナップショットレポジトリ] の
+{snapshot-repo}/org/junit/[/org/junit] 以下にデプロイされます。
 
 [[dependency-metadata]]
 === 依存関係のメタデータ
@@ -15,69 +16,68 @@ Maven Centralにデプロイされます。
 * *Group ID*: `org.junit.platrform`
 * *Version*: `{platform-version}`
 * *Articfact IDs*:
-** `junit-platform-commons`：
-        JUnitの内部共通ライブラリ・ユーティリティです。
+  `junit-platform-commons` ::
+        JUnitの内部共通ライブラリ/ユーティリティです。
         これらのユーティリティは、JUnitフレームワーク内部使用のみが意図されています。
         _外部パーティからのいかなる使用はサポートされていません。_
         使用は自身の責任で行ってください！
-** `junit-platform-console`：
-        コンソールからJUnit Platform上でテストを発見し実行することをサポートします。
-        詳細については <<running-tests-console-launcher,Console Launcher>> をご覧ください。
-** `junit-platform-console-standalone`：
+   `junit-platform-console`::
+        コンソールからのJUnit Platform上におけるテスト発見・実行をサポートします。
+        詳細については <<running-tests-console-launcher,コンソールラウンチャー>> をご覧ください。
+   `junit-platform-console-standalone`::
         全ての依存関係が包含された実行可能な JAR ファイルが Maven Central の
         https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone[junit-platform-standalone]
-        以下のディレクトリで提供されています。
-        詳細については <<running-tests-console-launcher,Console Launcher>> をご覧ください。
-** `junit-platform-engine`：
+        ディレクトリ以下で提供されています。
+        詳細については <<running-tests-console-launcher,コンソールラウンチャー>> をご覧ください。
+   `junit-platform-engine`::
         テストエンジンのパブリックAPIです。
         詳細については <<launcher-api-engines-custom, 自身のテストエンジンをプラグインする>>
         をご覧ください。
-** `junit-platform-launcher`：
+   `junit-platform-launcher`::
         テストプランを設定・起動するためのパブリックAPIです。
         -- 典型的にはIDEやビルドツールによって使われます。
-        詳細については <<launcher-api, JUnit Platform Launcher API>> をご覧ください。
-** `junit-platform-runner`：
-        JUnit 4環境におけるJUnit Platform上でテストとテストスイートを実行するための
-        ランナーです。
+        詳細については <<launcher-api,  JUnit Platform ラウンチャーAPI>> をご覧ください。
+   `junit-platform-runner`::
+        JUnit 4環境においてJUnit Platform上でテストとテストスイートを実行するためのランナーです。
         詳細については
-        <<running-tests-junit-platform-runner, JUnit Platformを実行するためにJUnit 4を使用する>>
+        <<running-tests-junit-platform-runner, JUnit 4を用いてJUnit Platformを実行>>
         をご覧ください。
-** `junit-platform-suite-api`：
+   `junit-platform-suite-api`::
         JUnit Platform上でテストスイートを設定するためのアノテーションです。
-        <<running-tests-junit-platform-runner,JUnitPlatform runner>>
+        <<running-tests-junit-platform-runner,JUnitPlatform ランナー>>
         にサポートされています。
         また、サードパーティによる `TestEngine` 実装にも
         サポートされている可能性があります。
-** `junit-platform-surefire-provider`：
+   `junit-platform-surefire-provider`::
         <<running-tests-build-gradle,Maven Surefire>> を用いた
-        JUnit Platform上でのテストの発見・実行をサポートします。
+        JUnit Platform上でのテスト発見・実行をサポートします。
 
 [[dependency-metadata-junit-jupiter]]
 ==== JUnit Jupiter
 
-* Group ID: `org.junit.jupiter`
-* Version: `{jupiter-version}`
-* Articfact IDs:
-** `junit-jupiter-api`：
+* *Group ID*: `org.junit.jupiter`
+* *Version*: `{jupiter-version}`
+* *Articfact IDs*:
+   `junit-jupiter-api`::
         <<writing-tests,テストを書いたり>> 、 <<extensions,拡張する>>
         ためのJUnit Jupiter APIです。
-** `junit-jupiter-engine`：
+   `junit-jupiter-engine`::
         JUnit Jupiter テストエンジンの実装で、実行時のみ必要です。
-** `junit-jupiter-params`：
+   `junit-jupiter-params`::
         JUnit Jupiterでの <<writing-tests-parameterized-tests, パラメータ化テスト>>
         をサポートします。
-** `junit-jupiter-migrationsupport`：
-        JUnit 4からJUnit Jupiterへのマイグレーションをサポートします。
+   `junit-jupiter-migrationsupport`::
+        JUnit 4からJUnit Jupiterへの移行をサポートします。
         特定のJUnit 4 ルールを実行する時のみ必要です。
 
 [[dependency-metadata-junit-vintage]]
 ==== JUnit Vintage
 
-* Group ID: `org.junit.vintage`
-* Version: `{vintage-version}`
-* Articfact ID:
-** `junit-vintage-engine`：
-        JUnit Vintageテストエンジンの実装です。
+* *Group ID*: `org.junit.vintage`
+* *Version*: `{vintage-version}`
+* *Articfact ID*:
+   `junit-vintage-engine`::
+        JUnit Vintageテストエンジンの実装で、
         かつてのJUnitテスト（つまり、JUnit 3やJUnit 4形式で書かれたテスト）
         を新しいJUnit Platform上で実行できます。
 
@@ -90,24 +90,24 @@ https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanis
 https://docs.gradle.org/current/userguide/managing_transitive_dependencies.html#sec:bom_import[Gradle]
 を用いて複数の上記アーティファクトを参照する際に、依存関係管理を容易にするために利用できます。
 
-* Group ID: `org.junit`
-* Articfact ID: `junit-bom`
-* Version: `{bom-version}`
+* *Group ID*: `org.junit`
+* *Articfact ID*: `junit-bom`
+* *Version*: `{bom-version}`
 
 [[dependency-metadata-dependencies]]
 ==== 依存関係
 
 上記のアーティファクトは全て、次の _@API Guardian JAR_ で公開されているMaven POMsに依存関係があります。
 
-* Group ID: `org.apiguardian`
-* Articfact ID: `apiguardian-api`
-* Version: `{apiguardian-version}`
+* *Group ID*: `org.apiguardian`
+* *Articfact ID*: `apiguardian-api`
+* *Version*: `{apiguardian-version}`
 
 さらに、上記アーティファクトのほとんどは、次の _OpenTest4J_ JARと直接的、または推移的な依存関係があります。
 
-* Group ID: `org.opentest4j`
-* Articfact ID: `opentest4j`
-* Version: `{ota4j-version}`
+* *Group ID*: `org.opentest4j`
+* *Articfact ID*: `opentest4j`
+* *Version*: `{ota4j-version}`
 
 [[dependency-diagram]]
 === 依存関係図
@@ -116,13 +116,13 @@ image::https://junit.org/junit5/docs/{docs-version}/user-guide/images/component-
 [[dependency-metadata-junit-jupiter-samples]]
 === JUnit Jupiter サンプルプロジェクト
 
-https://github.com/junit-team/junit5-samples[junit5-samples] レポジトリは、
-JUnit JupiterとJUnit Vintageをベースとしたサンプルプロジェクト集をホストしています。
+{junit5-samples-repo}[`junit5-samples`] レポジトリは、JUnit Jupiterと
+JUnit Vintageをベースとしたサンプルプロジェクト集をホストしています。
 下記プロジェクトにはビルドスクリプト
 (`build.gradle` や `pom.xml` など) がそれぞれ置かれています。
 
-* GradleとJavaに関しては、 `{junit5-jupiter-starter-gradle}` を確認してください。
-* GradleとKotlinに関しては、 `{junit5-jupiter-starter-gradle-kotlin}` を確認してください。
-* GradleとGroovyに関しては、 `{junit5-jupiter-starter-gradle-groovy}` を確認してください。
-* Mavenに関しては、 `{junit5-jupiter-starter-maven}` を確認してください。
-* Antに関しては、 `{junit5-jupiter-starter-ant}` を確認してください。
+* GradleとJavaについては、 `{junit5-jupiter-starter-gradle}` を確認してください。
+* GradleとKotlinについては、 `{junit5-jupiter-starter-gradle-kotlin}` を確認してください。
+* GradleとGroovyについては、 `{junit5-jupiter-starter-gradle-groovy}` を確認してください。
+* Mavenについては、 `{junit5-jupiter-starter-maven}` を確認してください。
+* Antについては、 `{junit5-jupiter-starter-ant}` を確認してください。
