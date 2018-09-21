@@ -4,8 +4,8 @@
 [[extensions-overview]]
 === 概要
 
-JUnit 4において競合している `Runner` と `@Rule` 、 `@ClassRule` の
-拡張ポイントとは対照的に、JUnit Jupiterの拡張モデルは単一の包括的なコンセプト：
+JUnit 4において互いに競合している `Runner` と `@Rule` 、 `@ClassRule` の
+拡張ポイントとは対照的に、JUnit Jupiterの拡張モデルは、単一の包括的なコンセプト：
 `Extension` APIからなっています。しかしながら、 `Extension` 自体はただの
 マーカーインターフェイスであることに注意してください。
 
@@ -36,7 +36,7 @@ void test(@Random int i) {
 }
 ----
 
-特定のクラスとそのサブクラスの全てのテストにカスタム `RandomParametersExtension` を
+特定のクラスとそのサブクラス内の全てのテストにカスタム `RandomParametersExtension` を
 登録するには、次のようにテストクラスにアノテーションを付与します。
 
 [source,java]
@@ -77,7 +77,7 @@ NOTE: `@ExtendWith` を通した宣言的に登録された拡張は、
 [[extensions-registration-programmatic]]
 ==== プログラム的な拡張登録
 
-テストクラスのフィールドに `{RegisterExtension}` を付与することで、
+テストクラス内のフィールドに `{RegisterExtension}` を付与することで、
 _プログラム的に_ 拡張を登録できます。
 
 <<extensions-registration-declarative,`@ExtendWith`>> を通して
@@ -95,10 +95,11 @@ NOTE: `@RegisterExtension` フィールドは、 `private` や `null`（評価�
 
 `@RegisterExtension` フィールドが `static` である場合、
 `@ExtendWith` を通したクラスレベルでの拡張が登録された後に、拡張は登録されます。
-そのような `静的な拡張` は、拡張API内で実装できることを制限するものではありません。
-静的なフィールドを通して登録された拡張はそのため、 `BeforeEachCallback` のような
+そのような _静的な拡張_ は、拡張API内で実装できることを制限するものではありません。
+そのため、静的なフィールドを通して登録された拡張は `BeforeEachCallback` のような
 メソッドレベルの拡張APIと同様に、 `BeforeAllCallback` や `AfterAllCallback` 、
-`TestInstancePostProcessor` のようなクラスレベルとインスタンスレベルの拡張APIを実装します。
+`TestInstancePostProcessor` のようなクラスレベルとインスタンスレベルの
+拡張APIを実装することができます。
 
 次の例では、テストクラスの `server` フィールドが、 `WebServerExtension` によって
 サポートされているビルダーパターンを用いてプログラム的に初期化されます。
@@ -167,8 +168,8 @@ class KotlinWebServerDemo {
 ===== インスタンスフィールド
 
 `@RegisterExtension` フィールドが非静的（つまり、インスタンスフィールド）である場合、
-テストクラスが初期化された後、さらに、登録された各 `TestInstancePostProcessor` が
-テストインスタンスを事後処理されてから
+テストクラスが初期化されてから、さらに登録された各 `TestInstancePostProcessor` が
+テストインスタンスを事後処理してから
 （使われる拡張のインスタンスをアノテーションが付与されたフィールドに潜在的に挿入します）、
 拡張は登録されます。そのため、そのような _インスタンス拡張_ が `BeforeAllCallback` や
 `AfterAllCallback` 、 `TestInstancePostProcessor` のようなクラスレベル、
@@ -183,7 +184,7 @@ class KotlinWebServerDemo {
 呼び出し、その結果を `DocumentationExtension` の静的な `forPath()` ファクトリメソッドに
 供給することで、プログラム的に初期化されます。設定された `DocumentationExtension` は、
 メソッドレベルの拡張として自動的に登録されます。さらに、 `@BeforeEach` や `@AfterEach` 、
-`@Test` メソッドは、必要であれば、 `docs` フィールドを通して拡張のインスタンスにアクセスできます。
+`@Test` メソッドは、必要であれば `docs` フィールドを通して拡張のインスタンスにアクセスできます。
 
 
 
@@ -222,11 +223,11 @@ _グローバル拡張登録_ もサポートしており、サードパーテ�
 [[extensions-registration-automatic-enabling]]
 ===== 自動拡張検出の有効化
 
-自動検出は先進的な特徴で、そのためデフォルトでは有効化されていません。
+自動検出は先進的な特徴であるためデフォルトでは有効化されていません。
 有効化するには、単に `junit.jupiter.extensions.autodetection.enabled`  _設定パラメータ_ に
 `true` をセットするだけです。これは、JVMシステムプロパティや `Launcher` に渡される
 `LauncherDiscoveryRequest` 内の _設定パラメータ_ として、
-またはJUnit Platform設定ファイル（詳細は <<running-tests-config-params, 設定パラメータ>> をご覧ください）を通しても供給することが可能です。
+またはJUnit Platform設定ファイル（詳細は <<running-tests-config-params, 設定パラメータ>> をご覧ください）を通じて供給することも可能です。
 
 例えば、拡張の自動検出を有効にするには、JVMを次のシステムプロパティで起動します。
 
@@ -250,7 +251,7 @@ _グローバル拡張登録_ もサポートしており、サードパーテ�
 `{ExecutionCondition}` は、プログラム的な _条件付きテスト実行_ のための
 `Extension` APIを定義しています。
 
-`ExecutionCondition` は、各コンテナ（つまり、テストクラス）が含む全てのテストを
+`ExecutionCondition` は、各コンテナ（例えば、テストクラス）が含む全てのテストを
 実行すべきか、供給された `ExecutionContext` に則って決定するために _評価_ されます。
 同じように `ExecutionCondition` は、各テストごとに供給された `ExecutionContext` に則って
 実行されるか決定するために _評価_ されます。
@@ -258,10 +259,11 @@ _グローバル拡張登録_ もサポートしており、サードパーテ�
 複数の `ExecutionCondition` が登録されている場合、コンテナもしくはテストは、
 条件のうち1つでも _disabled_ を返した瞬間に無効化されます。
 そのため、条件が評価されるかどうかの保証はありません。
-なぜなら、他の条件が既にコンテナもしくはテストを無効化している可能性があるからです。
-つまり、評価は短絡ブーリアンORオペレータのように作動します。
+なぜなら、他の条件が既にコンテナ、もしくはテストを無効化している可能性があるからです。
+つまり、評価は短絡boolean ORオペレータのように作動します。
 
-具体的な例については、 `{DisabledCondition}` と `{Disabled}` のソースコードをご覧ください。
+具体的な例については、 `{DisabledCondition}` と
+ `{Disabled}` のソースコードをご覧ください。
 
 [[extensions-conditions-deactivation]]
 ==== 条件の無効化
@@ -269,7 +271,7 @@ _グローバル拡張登録_ もサポートしており、サードパーテ�
 時には、いくつかの条件を有効に _しないで_ テストスイートを実行することが役に立ちます。
 例えば、 `@Disabled` がたとえ付与されていたとしても、それらが _壊れていないか_
 確認するために実行したいかもしれません。
-このためには、単に `junit.jupiter.conditions.deactivate`  _設定パラメータ_ に
+そのためには、単に `junit.jupiter.conditions.deactivate`  _設定パラメータ_ に
 現在のテスト実行でどの条件を無効化する（つまり、評価しない）かを指定するパターンを提供するだけです。
 パターンは、JVMシステムプロパティや、 `Launcher` に渡される `LauncherDiscoveryRequest` 内の
 _設定パラメータ_ として、もしくはJUnit Platform設定ファイル
@@ -293,11 +295,11 @@ _設定パラメータ_ として、もしくはJUnit Platform設定ファイル
 
 例：
 
-* `*` ：全ての条件を無効化します。
-* `org.junit.*` ： `org.junit` パッケージとサブパッケージ以下の全ての条件を無効化します。
-* `*.MycCondition`：クラス名が `MyCondition` のものを無効化します。
-* `*System*` ：クラス名に `System` を含むものを無効化します。
-* `org.example.MyCondition` ：FQCNが `org.example.MyCondition` のものを無効化します。
+* `+*+` ：全ての条件を無効化します。
+* `+org.junit.*+` ： `org.junit` パッケージとサブパッケージ以下の全ての条件を無効化します。
+* `+*.MycCondition+`：クラス名が `MyCondition` のものを無効化します。
+* `+*System*+` ：クラス名に `System` を含むものを無効化します。
+* `+org.example.MyCondition+` ：FQCNが `org.example.MyCondition` のものを無効化します。
 
 [[extensions-test-instance-factories]]
 === テストインスタンスファクトリー
@@ -344,15 +346,17 @@ _設定パラメータ_ として、もしくはJUnit Platform設定ファイル
 `{ParameterResolver}` は、実行時にパラメータを動的に解決するための
 `Extension` APIを定義しています。
 
-テストコンストラクタまたは `@Test` や `@RepeatedTest` 、 `@ParameterizedTest` 、
-`@TestFactory` 、 `@BeforeEach` 、 `@AfterEach` 、 `@BeforeAll` 、 `@AfterAll`メソッドが
-パラメータを受け入れている場合、パラメータは `ParameterResolver` によって実行時に
-_解決される_ 必要があります。 `ParameterResolver`は 、組み込みもの（ `{TestInfoParameterResolver}` をご覧ください）
-まはた <<extensions-registration,ユーザが登録したもの>> を使うことができます。
+テストコンストラクタ、または `@Test` や `@RepeatedTest` 、 `@ParameterizedTest` 、
+`@TestFactory` 、 `@BeforeEach` 、 `@AfterEach` 、 `@BeforeAll` 、 `@AfterAll`
+メソッドがパラメータを受け入れている場合、パラメータは `ParameterResolver` によって実行時に
+_解決される_ 必要があります。 `ParameterResolver` は 、組み込みのもの（ `{TestInfoParameterResolver}` をご覧ください）
+、もしくは <<extensions-registration,ユーザが登録したもの>> を使うことができます。
 一般的には、パラメータは _名前_ や _型_ 、 _アノテーション_ 、それらの組み合わせで解決されます。
 `{CustomTypeParameterResolver}` と `{CustomAnnotationParameterResolver}` のソースコードをご覧ください。
 
-WARNING: JDK 9より前のバージョンのJDKの `javac` によって生成されるバイトコード内の
+[WARNING]
+====
+JDK 9より前のバージョンのJDKの `javac` によって生成されるバイトコード内の
 バグによって、コアの `java.lang.reflect.Parameter` APIを通したパラメータに対する
 アノテーションの直接の探索は、 _内部クラス_ のコンストラクタ
 （例えば、 `@Nested` テストクラス内のコントラクタ）は常に失敗します。
@@ -365,7 +369,7 @@ JDK内のこのバグを避けるために、 `java.lang.reflect.Parameter` 内�
 * `boolean isAnnotated(Class<? extends Annotation> annotationType)`
 * `Optional<A> findAnnotation(Class<A> annotationType)`
 * `List<A> findRepeatableAnnotations(Class<A> annotationType)`
-
+====
 
 [[extensions-lifecycle-callbacks]]
 === テストライフサイクルのコールバック
@@ -573,7 +577,7 @@ public class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 === 拡張での状態の保持
 
 通常、拡張は一度だけインスタンス化されます。
-そのため、このような関連する質問が挙がります：拡張のある呼び出しからの状態はどのようにして次の呼び出しに保持されるのか？
+そのため、この質問は適切です：拡張のある呼び出しから生じた状態はどのようにして次の呼び出しに保持されるのか？
 `ExtensionContext` APIは、まさにこの目的のための `Store` を提供します。
 拡張は、後からの収集のためにストアに値を入れます。
 メソッドレベルのスコープでの `Store` の使用例は、
@@ -639,7 +643,7 @@ NOTE: 拡張コンテキストのストアは、その拡張コンテキスト�
 いくつかの拡張コールバックが呼び出されます。
 次の図は、ユーザ提供のコードと拡張コードの相対順序を示しています。
 
-:figure-caption: User code and extension code
+:figure-caption: ユーザコードと拡張コード
 
 [#extensions-execution-order-diagram,reftext='{figure-caption}']
 image::https://junit.org/junit5/docs/5.2.0/user-guide/images/extensions_lifecycle.png[caption='',title='{figure-caption}', link=]
